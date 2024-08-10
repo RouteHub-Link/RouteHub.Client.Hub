@@ -8,11 +8,14 @@ package layouts
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
-)
+import "github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
 
-func Main(contents templ.Component, m components.MetaDescription) templ.Component {
+type LayoutDescription struct {
+	MetaDescription   components.MetaDescription
+	NavbarDescription *components.NavbarDescription
+}
+
+func Main(contents templ.Component, layoutDescription LayoutDescription) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -34,11 +37,15 @@ func Main(contents templ.Component, m components.MetaDescription) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = head(m).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = head(layoutDescription.MetaDescription).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.Navbar(layoutDescription.NavbarDescription).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

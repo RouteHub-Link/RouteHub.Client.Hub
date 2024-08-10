@@ -1,0 +1,127 @@
+package components
+
+type NavbarDescription struct {
+	BrandImg   *ImageDescription
+	BrandURL   string
+	BrandName  string
+	Target     string
+	StartItems *[]NavbarItem
+	EndButtons *[]NavbarButton
+}
+
+type NavbarItem struct {
+	Text     string
+	URL      string
+	Target   string
+	Icon     string
+	Dropdown *[]NavbarItem
+}
+
+type NavbarButton struct {
+	Text       string
+	URL        string
+	Icon       string
+	Target     string
+	ColorClass string
+}
+
+templ Navbar(nd *NavbarDescription) {
+	if (nd != nil) {
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		@navbarBrand(*nd)
+		@navbarMenu(*nd)
+	</nav>
+	@navbarJavascript()
+	}
+}
+
+templ navbarBrand(nd NavbarDescription) {
+	<div class="navbar-brand">
+		<a class="navbar-item" href={ templ.URL(nd.BrandURL) } target={ nd.Target }>
+			if (nd.BrandImg != nil) {
+				@Img(nd.BrandImg)
+			} else {
+				{ nd.BrandName }
+			}
+		</a>
+		if nd.StartItems != nil {
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		}
+	</div>
+}
+
+templ navbarMenu(nd NavbarDescription) {
+	<div id="navbarBasicExample" class="navbar-menu">
+		@navbarStart(nd)
+		@navbarEnd(nd)
+	</div>
+}
+
+templ navbarStart(nd NavbarDescription) {
+	<div class="navbar-start">
+		if nd.StartItems != nil {
+			for _, item := range *nd.StartItems {
+				@navbarItem(item)
+			}
+		}
+	</div>
+}
+
+templ navbarEnd(nd NavbarDescription) {
+	<div class="navbar-end">
+		if nd.EndButtons != nil {
+			for _, button := range *nd.EndButtons {
+				@navbarButton(button)
+			}
+		}
+	</div>
+}
+
+templ navbarItem(item NavbarItem) {
+	if item.Dropdown == nil {
+		<a class="navbar-item" href={ templ.URL(item.URL) } target={ item.Target }>
+			if (item.Icon != "") {
+				<span class="icon">
+					<i class={ item.Icon }></i>
+				</span>
+			}
+			{ item.Text }
+		</a>
+	} else {
+		<div class="navbar-item has-dropdown is-hoverable">
+			<a class="navbar-link">
+				<span class="icon">
+					<i class={ item.Icon }></i>
+				</span>
+				{ item.Text }
+			</a>
+			<div class="navbar-dropdown">
+				for _, subItem := range *item.Dropdown {
+					@navbarItem(subItem)
+				}
+			</div>
+		</div>
+	}
+}
+
+templ navbarButton(button NavbarButton) {
+	<div class="navbar-item">
+		<a class={ "button " + button.ColorClass } href={ templ.URL(button.URL) } target={ button.Target }>
+			if (button.Icon != "") {
+				<span class="icon">
+					<i class={ button.Icon }></i>
+				</span>
+			}
+			{ button.Text }
+		</a>
+	</div>
+}
+
+templ navbarJavascript() {
+{ "<script> document.addEventListener('DOMContentLoaded', () => { const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0); $navbarBurgers.forEach( el => { el.addEventListener('click', () => { const target = el.dataset.target; const $target = document.getElementById(target); el.classList.toggle('is-active'); $target.classList.toggle('is-active'); }); }); }); </script>"} 
+}

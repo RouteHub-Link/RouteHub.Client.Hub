@@ -1,12 +1,18 @@
 package layouts
-import (
-	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
-)
-templ Main(contents templ.Component, m components.MetaDescription) {
+
+import "github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
+
+type LayoutDescription struct {
+	MetaDescription   components.MetaDescription
+	NavbarDescription *components.NavbarDescription
+}
+
+templ Main(contents templ.Component, layoutDescription LayoutDescription) {
 	<!DOCTYPE html>
 	<html>
-		@head(m)
+		@head(layoutDescription.MetaDescription)
 		<body>
+			@components.Navbar(layoutDescription.NavbarDescription)
 			@contents
 			@footer()
 		</body>
@@ -21,7 +27,6 @@ templ head(m components.MetaDescription) {
 		@components.MetaBlock(m)
 	</head>
 }
-
 
 templ footer() {
 	<footer class="footer">

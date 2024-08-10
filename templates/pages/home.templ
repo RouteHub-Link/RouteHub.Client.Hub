@@ -2,11 +2,11 @@ package pages
 
 import (
 	layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
-	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
 )
 
-templ Home(m components.MetaDescription) {
-	@layouts.Main(page(), m)
+
+templ Home(ld layouts.LayoutDescription) {
+	@layouts.Main(page(), ld)
 }
 
 templ page() {
