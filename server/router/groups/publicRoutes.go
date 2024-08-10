@@ -1,12 +1,9 @@
 package groups
 
 import (
-	"net/http"
-
-	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
+	"github.com/RouteHub-Link/routehub.client.hub/server/router/handlers"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
-	"github.com/RouteHub-Link/routehub.client.hub/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
@@ -23,9 +20,8 @@ var (
 )
 
 func MapPublicRoutes(e *echo.Echo) {
-	e.GET("/", HomeHandler)
-}
+	echoHandlers := handlers.NewEchoHandlers(layoutDescription)
 
-func HomeHandler(c echo.Context) error {
-	return extensions.Render(c, http.StatusOK, pages.Home(layoutDescription))
+	e.GET("/", echoHandlers.HomeHandler)
+	e.GET("/pins", echoHandlers.PinHandler)
 }
