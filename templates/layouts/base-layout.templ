@@ -1,19 +1,37 @@
 package layouts
-
-templ Main(contents templ.Component) {
+import (
+	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
+)
+templ Main(contents templ.Component, m components.MetaDescription) {
 	<!DOCTYPE html>
 	<html>
-		@head()
+		@head(m)
 		<body>
 			@contents
+			@footer()
 		</body>
 	</html>
 }
 
-templ head() {
+templ head(m components.MetaDescription) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<link rel="stylesheet" href="/bulma/bulma.min.css"/>
+		@components.MetaBlock(m)
 	</head>
+}
+
+
+templ footer() {
+	<footer class="footer">
+		<div class="content has-text-centered">
+			<p>
+				<strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>.
+				The source code is licensed
+				<a href="https://opensource.org/license/mit">MIT</a>. The
+				website content is licensed
+			</p>
+		</div>
+	</footer>
 }
