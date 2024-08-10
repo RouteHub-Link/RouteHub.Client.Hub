@@ -16,8 +16,8 @@ var (
 	navbarEndButtons = []components.NavbarButton{{Text: "Login", URL: "/login", Target: "_self", ColorClass: "is-secondary"}, {Text: "Sign Up", URL: "/signup", Target: "_self", ColorClass: "is-primary"}}
 	brandImg         = components.ImageDescription{SRC: "https://avatars.githubusercontent.com/u/153122518?s=250", Alt: "RouteHub", Width: "30", Height: "30"}
 
-	mavbar            = components.NavbarDescription{BrandName: "RouteHub", BrandURL: "https://routehub.link", BrandImg: &brandImg, StartItems: &navbarItems, EndButtons: &navbarEndButtons}
-	layoutDescription = layouts.LayoutDescription{MetaDescription: mockMeta, NavbarDescription: nil}
+	navbar            = components.NavbarDescription{BrandName: "RouteHub", BrandURL: "https://routehub.link", BrandImg: &brandImg, StartItems: &navbarItems, EndButtons: &navbarEndButtons}
+	layoutDescription = layouts.LayoutDescription{MetaDescription: mockMeta, NavbarDescription: &navbar}
 )
 
 func MapPublicRoutes(e *echo.Echo) {

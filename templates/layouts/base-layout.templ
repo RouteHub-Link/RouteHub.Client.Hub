@@ -14,7 +14,7 @@ templ Main(contents templ.Component, layoutDescription LayoutDescription) {
 		<body>
 			@components.Navbar(layoutDescription.NavbarDescription)
 			@contents
-			@footer()
+			@components.Footer()
 		</body>
 	</html>
 }
@@ -28,15 +28,3 @@ templ head(m components.MetaDescription) {
 	</head>
 }
 
-templ footer() {
-	<footer class="footer">
-		<div class="content has-text-centered">
-			<p>
-				<strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>.
-				The source code is licensed
-				<a href="https://opensource.org/license/mit">MIT</a>. The
-				website content is licensed
-			</p>
-		</div>
-	</footer>
-}

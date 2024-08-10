@@ -1,28 +1,27 @@
 package components
 
 type ImageDescription struct {
-    SRC    string
-    Alt    string
-    Height string
-    Width  string
+	SRC    string
+	Alt    string
+	Height string
+	Width  string
 }
 
 templ Img(imageDescription *ImageDescription) {
-	if (imageDescription == nil) {
-		return
+	if (imageDescription != nil) {
+		<img
+			src={ imageDescription.SRC }
+			alt={ imageDescription.Alt }
+			if imageDescription.Width != "" {
+				width={ imageDescription.Width }
+			} else {
+				width="112"
+			}
+			if imageDescription.Height != "" {
+				height={ imageDescription.Height }
+			} else {
+				height="28"
+			}
+		/>
 	}
-	<img
-		src={ imageDescription.SRC }
-		alt={ imageDescription.Alt }
-		if imageDescription.Width != "" {
-			width={ imageDescription.Width }
-		} else {
-			width="112"
-		}
-		if imageDescription.Height != "" {
-			height={ imageDescription.Height }
-		} else {
-			height="28"
-		}
-	/>
 }

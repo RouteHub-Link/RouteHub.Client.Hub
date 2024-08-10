@@ -33,3 +33,4 @@
 <i class=\"
 \"></i></span> 
 </a></div>
+<script src=\"/js/navbar.js\"></script>
