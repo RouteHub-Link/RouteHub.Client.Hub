@@ -2,25 +2,24 @@ package layouts
 
 import "github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
 
-type LayoutDescription struct {
-	MetaDescription   components.MetaDescription
-	NavbarDescription *components.NavbarDescription
-	FooterDescription *components.FooterDescription
-}
-
-templ Main(contents templ.Component, layoutDescription LayoutDescription) {
+templ Main(md MainDescription) {
 	<!DOCTYPE html>
 	<html>
-		@head(layoutDescription.MetaDescription)
+		@head(md.LayoutDescription.MetaDescription)
+		if md.AdditionalHead != nil {
+			@md.GetAdditionalHead()
+		}
 		<body>
 			<section class="section content">
-				@components.Navbar(layoutDescription.NavbarDescription)
-				@contents
+				@components.Navbar(md.LayoutDescription.NavbarDescription)
+				@md.MainContent
 			</section>
-			
-			@components.Footer(layoutDescription.FooterDescription)
+			@components.Footer(md.LayoutDescription.FooterDescription)
 		</body>
-		@scripts(layoutDescription)
+		@scripts(md.LayoutDescription)
+		if md.AdditionalFooter != nil {
+			@md.GetAdditionalFooter()
+		}
 	</html>
 }
 

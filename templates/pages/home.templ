@@ -1,12 +1,12 @@
 package pages
 
-import (
-	layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
-)
-
+import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
 
 templ Home(ld layouts.LayoutDescription) {
-	@layouts.Main(homePage(), ld)
+	@layouts.Main(layouts.MainDescription{
+		MainContent:       homePage(),
+		LayoutDescription: ld,
+	})
 }
 
 templ homePage() {

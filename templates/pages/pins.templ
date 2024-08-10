@@ -1,12 +1,11 @@
 package pages
 
-import (
-	layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
-)
-
+import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
 
 templ Pins(ld layouts.LayoutDescription) {
-	@layouts.Main(pinPage(), ld)
+	@layouts.Main(layouts.MainDescription{}.
+		SetMainContent(pinPage()).
+		SetLayoutDescription(ld))
 }
 
 templ pinPage() {

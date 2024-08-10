@@ -1,0 +1,54 @@
+package redirections
+
+import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+
+type TimedDescription struct {
+	Title              string
+	Description        string
+	RedirectionDetails string
+	RedirectionURL     string
+	RedirectionURLText string
+	RedirectionDelay   string
+}
+
+templ Timed(ld layouts.LayoutDescription, td *TimedDescription) {
+	@layouts.Main(layouts.MainDescription{}.
+		SetMainContent(timedPage(td)).
+		SetLayoutDescription(ld).
+        SetFooter(timedScripts(td.RedirectionDelay, td.RedirectionURL)))
+}
+
+templ timedPage(td *TimedDescription) {
+	if (td == nil) {
+		<section class="section">
+			<div class="tile is-parent">
+				<article class="tile is-child box">
+					<div class="content">
+						<p class="title">{ td.Title } Welcome The Hub</p>
+						<p class="subtitle">{ td.Description }</p>
+						<hr/>
+						<div class="content">
+							{ td.RedirectionDetails }
+						</div>
+						<div class="content">
+							You will be automatically redirected to
+							<a href={ templ.URL(td.RedirectionURL) }>
+								{ td.RedirectionURLText }
+							</a>
+							after <span id="delay">{ td.RedirectionDelay } </span> seconds.
+							<p style="font-weight: 200; margin:5px">
+								Click on the link if you are not automatically
+								redirected.
+							</p>
+						</div>
+					</div>
+				</article>
+			</div>
+		</section>
+	}
+}
+
+templ timedScripts(redirectionDelay string, redirectionUrl string) {
+	<script src="/js/redirections/timed.js"></script>
+	@templ.Raw("<script> startProgress(" + redirectionDelay + "," + redirectionUrl + "); </script>")
+}

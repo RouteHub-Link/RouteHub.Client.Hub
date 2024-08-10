@@ -1,0 +1,16 @@
+package redirections
+
+import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+
+templ Confirm(ld layouts.LayoutDescription) {
+	@layouts.Main(layouts.MainDescription{
+		MainContent:       confirmPage(),
+		LayoutDescription: ld,
+	})
+}
+
+templ confirmPage() {
+	<section class="section">
+		<div class="tile is-parent"></div>
+	</section>
+}
