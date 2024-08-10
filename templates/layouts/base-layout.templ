@@ -1,0 +1,19 @@
+package layouts
+
+templ Main(contents templ.Component) {
+	<!DOCTYPE html>
+	<html>
+		@head()
+		<body>
+			@contents
+		</body>
+	</html>
+}
+
+templ head() {
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="/bulma/bulma.min.css"/>
+	</head>
+}
