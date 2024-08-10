@@ -34,6 +34,13 @@ templ Navbar(nd *NavbarDescription) {
 	}
 }
 
+templ navbarMenu(nd NavbarDescription) {
+	<div id="company-navbar" class="navbar-menu">
+		@navbarStart(nd)
+		@navbarEnd(nd)
+	</div>
+}
+
 templ navbarBrand(nd NavbarDescription) {
 	<div class="navbar-brand">
 		<a class="navbar-item" href={ templ.URL(nd.BrandURL) } target={ nd.Target }>
@@ -44,20 +51,13 @@ templ navbarBrand(nd NavbarDescription) {
 			}
 		</a>
 		if nd.StartItems != nil {
-			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="company-navbar">
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 			</a>
 		}
-	</div>
-}
-
-templ navbarMenu(nd NavbarDescription) {
-	<div id="navbarBasicExample" class="navbar-menu">
-		@navbarStart(nd)
-		@navbarEnd(nd)
 	</div>
 }
 

@@ -1,6 +1,0 @@
-<a href=\"
-\" target=\"
-\">
-<span class=\"
-\"><i data-feather=\"
-\"></i></span></a>

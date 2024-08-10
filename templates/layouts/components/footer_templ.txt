@@ -1,8 +1,0 @@
-<footer class=\"footer\"><div class=\"content has-text-centered\">
- 
- 
-</div></footer>
-<p class=\"has-text-grey-darker p-5\"><strong class=\"has-text-grey-darker\">Provided</strong> by  <a class=\"has-text-grey-dark\" href=\"https://routehub.link\">RouteHub</a></p>
-<p class=\"
-\">
-</p>
