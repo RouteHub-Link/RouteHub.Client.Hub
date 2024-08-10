@@ -1,14 +1,51 @@
 package components
 
-templ Footer() {
+type FooterDescription struct {
+	ShowRouteHubBranding bool
+	CompanyBrandingHtml  string
+	SocialMediaContainer *SocialMediaContainer
+}
+
+type SocialMediaContainer struct {
+	SocialMediaPeddingClass string
+	SocialMediaColorClass   string
+	SocialMediaSizeClass    string
+	SocialMediaLinks        *[]ASocialMedia
+}
+
+templ Footer(fd *FooterDescription) {
 	<footer class="footer">
 		<div class="content has-text-centered">
-			<p>
-				<strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>.
-				The source code is licensed
-				<a href="https://opensource.org/license/mit">MIT</a>. The
-				website content is licensed
-			</p>
+			if (fd != nil) {
+				if (fd.CompanyBrandingHtml != "") {
+					@templ.Raw(fd.CompanyBrandingHtml)
+				}
+				if (fd.SocialMediaContainer != nil) {
+					@socialMedia(*fd.SocialMediaContainer)
+				}
+				if (fd.ShowRouteHubBranding) {
+					@routehubBranding()
+				}
+			} else {
+				@routehubBranding()
+			}
 		</div>
 	</footer>
+}
+
+templ routehubBranding() {
+	<p class="has-text-grey-darker p-5">
+		<strong class="has-text-grey-darker">Provided</strong> by 
+		<a class="has-text-grey-dark" href="https://routehub.link">RouteHub</a>
+	</p>
+}
+
+templ socialMedia(smc SocialMediaContainer) {
+	<p class={ smc.SocialMediaColorClass + " " + smc.SocialMediaSizeClass + " " + smc.SocialMediaPeddingClass }>
+		if (smc.SocialMediaLinks != nil) {
+			for _, socialMedia := range *smc.SocialMediaLinks {
+				@SpanSocialMedia(socialMedia, smc.SocialMediaSizeClass)
+			}
+		}
+	</p>
 }

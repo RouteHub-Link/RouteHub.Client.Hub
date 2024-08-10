@@ -24,13 +24,20 @@
 \"></i></span> 
 </a><div class=\"navbar-dropdown\">
 </div></div>
-<div class=\"navbar-item\">
+<div class=\"navbar-item is-hidden-tablet\">
 <a class=\"
 \" href=\"
 \" target=\"
 \">
-<span class=\"icon\">
-<i class=\"
+<span class=\"
+\"><i data-feather=\"
+\"></i></span> 
+</a></div><div class=\"navbar-item is-hidden-mobile\">
+<a class=\"
+\" href=\"
+\" target=\"
+\">
+<span class=\"
+\"><i data-feather=\"
 \"></i></span> 
 </a></div>
-<script src=\"/js/navbar.js\"></script>

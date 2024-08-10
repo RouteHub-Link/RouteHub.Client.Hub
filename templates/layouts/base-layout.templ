@@ -5,6 +5,7 @@ import "github.com/RouteHub-Link/routehub.client.hub/templates/layouts/component
 type LayoutDescription struct {
 	MetaDescription   components.MetaDescription
 	NavbarDescription *components.NavbarDescription
+	FooterDescription *components.FooterDescription
 }
 
 templ Main(contents templ.Component, layoutDescription LayoutDescription) {
@@ -12,10 +13,14 @@ templ Main(contents templ.Component, layoutDescription LayoutDescription) {
 	<html>
 		@head(layoutDescription.MetaDescription)
 		<body>
-			@components.Navbar(layoutDescription.NavbarDescription)
-			@contents
-			@components.Footer()
+			<section class="section content">
+				@components.Navbar(layoutDescription.NavbarDescription)
+				@contents
+			</section>
+			
+			@components.Footer(layoutDescription.FooterDescription)
 		</body>
+		@scripts(layoutDescription)
 	</html>
 }
 
@@ -24,7 +29,25 @@ templ head(m components.MetaDescription) {
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<link rel="stylesheet" href="/bulma/bulma.min.css"/>
+		<link rel="stylesheet" href="/css/main.css"/>
 		@components.MetaBlock(m)
 	</head>
 }
 
+templ scripts(ld LayoutDescription) {
+	@featherScripts(ld.FooterDescription)
+	@navbarScript(ld.NavbarDescription)
+}
+
+templ featherScripts(footerDescription *components.FooterDescription) {
+	if (footerDescription != nil && footerDescription.SocialMediaContainer != nil && footerDescription.SocialMediaContainer.SocialMediaLinks != nil) {
+		<script defer src="/js/feather.min.js"></script>
+		<script src="/js/feather-loader.js"></script>
+	}
+}
+
+templ navbarScript(nd *components.NavbarDescription) {
+	if (nd != nil) {
+		<script src="/js/navbar.js"></script>
+	}
+}

@@ -1,0 +1,15 @@
+package components
+
+type ASocialMedia struct {
+	Icon   string
+	Link   string
+	Target string
+}
+
+templ SpanSocialMedia(socialMedia ASocialMedia, sizeClass string) {
+	<a href={ templ.URL(socialMedia.Link) } target={ socialMedia.Target }>
+		<span class={ "icon " + sizeClass }>
+			<i data-feather={ socialMedia.Icon }></i>
+		</span>
+	</a>
+}
