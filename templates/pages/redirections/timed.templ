@@ -19,7 +19,8 @@ templ Timed(ld layouts.LayoutDescription, td *TimedDescription) {
 }
 
 templ timedPage(td *TimedDescription) {
-	if (td == nil) {
+	if (td != nil) {
+
 		<section class="section">
 			<div class="tile is-parent">
 				<article class="tile is-child box">
@@ -44,11 +45,13 @@ templ timedPage(td *TimedDescription) {
 					</div>
 				</article>
 			</div>
+			
+			<progress class="progress is-big is-primary" max="100"></progress>
 		</section>
 	}
 }
 
 templ timedScripts(redirectionDelay string, redirectionUrl string) {
-	<script src="/js/redirections/timed.js"></script>
-	@templ.Raw("<script> startProgress(" + redirectionDelay + "," + redirectionUrl + "); </script>")
+	<script src="/static/js/redirection/timed.min.js"></script>
+	@templ.Raw("<script> startProgress(" + redirectionDelay + ",'" + redirectionUrl + "'); </script>")
 }

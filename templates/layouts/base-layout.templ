@@ -27,8 +27,8 @@ templ head(m components.MetaDescription) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<link rel="stylesheet" href="/bulma/bulma.min.css"/>
-		<link rel="stylesheet" href="/css/main.css"/>
+		<link rel="stylesheet" href="/static/bulma/bulma.min.css"/>
+		<link rel="stylesheet" href="/static/css/main.min.css"/>
 		@components.MetaBlock(m)
 	</head>
 }
@@ -40,13 +40,13 @@ templ scripts(ld LayoutDescription) {
 
 templ featherScripts(footerDescription *components.FooterDescription) {
 	if (footerDescription != nil && footerDescription.SocialMediaContainer != nil && footerDescription.SocialMediaContainer.SocialMediaLinks != nil) {
-		<script defer src="/js/feather.min.js"></script>
-		<script src="/js/feather-loader.js"></script>
+		<script defer src="/static/js/feather.min.js"></script>
+		<script src="/static/js/feather-loader.js"></script>
 	}
 }
 
 templ navbarScript(nd *components.NavbarDescription) {
 	if (nd != nil) {
-		<script src="/js/navbar.js"></script>
+		<script src="/static/js/navbar.js"></script>
 	}
 }

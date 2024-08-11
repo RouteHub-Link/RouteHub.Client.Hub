@@ -11,3 +11,4 @@ html {
   .content {
     flex: 1; /* This makes sure the content takes up the remaining space */
   }
+  

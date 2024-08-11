@@ -19,6 +19,7 @@ const (
 
 func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 	key := c.Param("key")
+	// TODO : handle favicon.ico request
 
 	c.Logger().Infof("Key: %s", key)
 
@@ -26,8 +27,8 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 
 	c.Logger().Infof("Choice: %s", choice)
 
-	// TODO - Get the choice from the clients
-	// TODO - Override eh.layoutDescription with the new layout description
+	// TODO : Get the choice from the clients
+	// TODO : Override eh.layoutDescription with the new layout description
 
 	testTimedDesc := redirection_pages.TimedDescription{
 		Title:              "We are redirecting you to Google...",

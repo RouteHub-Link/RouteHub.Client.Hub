@@ -24,5 +24,5 @@ func MapPublicRoutes(e *echo.Echo) {
 
 	e.GET("/", echoHandlers.HomeHandler)
 	e.GET("/pins", echoHandlers.PinHandler)
-	//e.GET("/:key", echoHandlers.HandleShortenURL)
+	e.GET("/:key", echoHandlers.HandleShortenURL)
 }
