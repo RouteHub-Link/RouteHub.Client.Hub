@@ -141,7 +141,7 @@ func timedPage(td *TimedDescription) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> seconds.<p style=\"font-weight: 200; margin:5px\">Click on the link if you are not automatically redirected.</p></div></div></article></div><progress class=\"progress is-big is-primary\" max=\"100\"></progress></section>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> seconds.<p style=\"font-weight: 200; margin:5px\">Click on the link if you are not automatically redirected.</p></div></div></article></div><progress id=\"progressBar\" class=\"progress is-big is-primary\" max=\"100\"></progress></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
