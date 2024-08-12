@@ -6,3 +6,9 @@ hotserve:
 
 templ:
 	templ generate -f TEMPL_EXPERIMENT=rawgo
+
+docker:
+	docker build -t routehub-client-hub:latest .
+
+podman:
+	podman build -t routehub-client-hub:latest .
