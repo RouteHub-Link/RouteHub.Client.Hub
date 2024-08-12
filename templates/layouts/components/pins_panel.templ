@@ -1,0 +1,17 @@
+package components
+
+type PanelDescription struct {
+	PanelHeading    string
+	PanelColorClass string
+	PanelTable      templ.Component
+}
+
+templ PinsPanel(pd PanelDescription) {
+	<article class={ "panel " + pd.PanelColorClass }>
+		<p class="panel-heading">{ pd.PanelHeading }</p>
+		
+        <div class="panel-block">
+           @pd.PanelTable
+        </div>
+	</article>
+}

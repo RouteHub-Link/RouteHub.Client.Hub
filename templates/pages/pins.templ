@@ -1,19 +1,29 @@
 package pages
 
-import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+import (
+	layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
+)
 
-templ Pins(ld layouts.LayoutDescription) {
+templ Pins(ld layouts.LayoutDescription, panels []components.PanelDescription) {
 	@layouts.Main(layouts.MainDescription{}.
-		SetMainContent(pinPage()).
+		SetMainContent(pinPage(panels)).
 		SetLayoutDescription(ld))
 }
 
-templ pinPage() {
+templ pinPage(panels []components.PanelDescription) {
 	<section class="section">
 		<div class="container has-text-centered">
 			<h1 class="title">
 				PINS
 			</h1>
+			<div class="columns is-centered">
+					for _, panel := range panels {
+				<div class="column">
+						@components.PinsPanel(panel)
+				</div>
+					}
+			</div>
 		</div>
 	</section>
 }

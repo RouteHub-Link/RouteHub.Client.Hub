@@ -1,0 +1,98 @@
+package components
+
+type TableCell struct {
+    Content string
+    Class   string
+}
+
+type TableRow struct {
+    Cells []TableCell
+    Class string
+}
+
+type TableHeader struct {
+    Content string
+    Title   string
+    Class   string
+}
+
+type TableDescription struct {
+    Headers           []TableHeader
+    Footers           []TableHeader
+    Rows              *[]TableRow
+    FooterIsSameAsHeader bool
+    Class             string
+}
+
+templ Table(td TableDescription) {
+	<table class={ "table " + td.Class }>
+		@tableHeader(td)
+		@tableFooter(td)
+		@tableBody(td)
+	</table>
+}
+
+templ tableHeading(th TableHeader, i int) {
+		<th  class={ th.Class }>
+			if (th.Title != "") {
+				<abbr title={ th.Title }>{ th.Content }</abbr>
+			} else {
+				{ th.Content }
+			}
+		</th>
+}
+
+templ tableFooter(td TableDescription) {
+	if  td.Footers != nil || td.FooterIsSameAsHeader {
+		<tfoot>
+			<tr>
+				if td.Footers != nil {
+					for i, th := range td.Footers {
+						@tableHeading(th, i)
+					}
+				} else if (td.FooterIsSameAsHeader) {
+					for i, th := range td.Headers {
+						@tableHeading(th, i)
+					}
+				}
+			</tr>
+		</tfoot>
+	}
+}
+
+templ tableHeader(td TableDescription) {
+	if td.Headers != nil {
+		<thead>
+			<tr>
+				for i, th := range td.Headers {
+					@tableHeading(th, i)
+				}
+			</tr>
+		</thead>
+	}
+}
+
+templ tableCell(td TableCell) {
+	<td class={ td.Class }>
+		@templ.Raw(td.Content)
+	</td>
+}
+
+templ tableRow(tr TableRow) {
+	<tr class={ tr.Class }>
+		for _, cell := range tr.Cells {
+			@tableCell(cell)
+		}
+	</tr>
+}
+
+
+templ tableBody(td TableDescription) {
+    if td.Rows != nil {
+        <tbody>
+            for _, tr := range *td.Rows {
+                @tableRow(tr)
+            }
+        </tbody>
+    }
+}
