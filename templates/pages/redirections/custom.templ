@@ -1,0 +1,28 @@
+package redirections
+
+import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+
+type CustomDescription struct {
+    HTML string
+}
+
+templ Custom(ld layouts.LayoutDescription, cd *CustomDescription) {
+    @layouts.Main(layouts.MainDescription{
+        MainContent:       customPage(cd),
+        LayoutDescription: ld,
+    })
+}
+
+templ customPage(cd *CustomDescription) {
+    if (cd != nil) {
+       <section class="section">
+			<div class="tile is-parent">
+				<article class="tile is-child box">
+					<div class="content">
+                        @templ.Raw(cd.HTML)
+					</div>
+				</article>
+			</div>
+		</section>
+    }
+}

@@ -2,15 +2,51 @@ package redirections
 
 import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
 
-templ Confirm(ld layouts.LayoutDescription) {
+type ConfirmDescription struct {
+	PageTitle          string
+	Title              string
+	Description        string
+	RedirectionDetails string
+	RedirectionURL     string
+	RedirectionURLText string
+}
+
+templ Confirm(ld layouts.LayoutDescription, cd *ConfirmDescription) {
 	@layouts.Main(layouts.MainDescription{
-		MainContent:       confirmPage(),
+		MainContent:       confirmPage(cd),
 		LayoutDescription: ld,
 	})
 }
 
-templ confirmPage() {
-	<section class="section">
-		<div class="tile is-parent"></div>
-	</section>
+templ confirmPage(cd *ConfirmDescription) {
+	if (cd != nil) {
+		<section class="section">
+			<div class="tile is-parent">
+				<article class="tile is-child box">
+					<div class="content">
+						<p class="title">{ cd.Title }</p>
+						<p class="subtitle">{ cd.Description }</p>
+						<hr/>
+						<div class="content">
+							{ cd.RedirectionDetails }
+						</div>
+						<div class="content">
+							We want to redirect you to
+							<span style="font-weight: 200; margin:5px">
+								{ cd.RedirectionURLText }
+							</span>
+							<div class=" is-child box">
+								Do you wanna be redirected 
+								<a href={ templ.URL(cd.RedirectionURL) }>
+									Yes
+								</a>
+								or 
+								<a href="javascript:history.back()">No </a>
+							</div>
+						</div>
+					</div>
+				</article>
+			</div>
+		</section>
+	}
 }
