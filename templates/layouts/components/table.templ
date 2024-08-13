@@ -1,27 +1,27 @@
 package components
 
 type TableCell struct {
-    Content string
-    Class   string
+	Content string
+	Class   string
 }
 
 type TableRow struct {
-    Cells []TableCell
-    Class string
+	Cells []TableCell
+	Class string
 }
 
 type TableHeader struct {
-    Content string
-    Title   string
-    Class   string
+	Content string
+	Title   string
+	Class   string
 }
 
 type TableDescription struct {
-    Headers           []TableHeader
-    Footers           []TableHeader
-    Rows              *[]TableRow
-    FooterIsSameAsHeader bool
-    Class             string
+	Headers              []TableHeader
+	Footers              []TableHeader
+	Rows                 *[]TableRow
+	FooterIsSameAsHeader bool
+	Class                string
 }
 
 templ Table(td TableDescription) {
@@ -33,13 +33,13 @@ templ Table(td TableDescription) {
 }
 
 templ tableHeading(th TableHeader, i int) {
-		<th  class={ th.Class }>
-			if (th.Title != "") {
-				<abbr title={ th.Title }>{ th.Content }</abbr>
-			} else {
-				{ th.Content }
-			}
-		</th>
+	<th class={ th.Class }>
+		if (th.Title != "") {
+			<abbr title={ th.Title }>{ th.Content }</abbr>
+		} else {
+			{ th.Content }
+		}
+	</th>
 }
 
 templ tableFooter(td TableDescription) {
@@ -86,13 +86,12 @@ templ tableRow(tr TableRow) {
 	</tr>
 }
 
-
 templ tableBody(td TableDescription) {
-    if td.Rows != nil {
-        <tbody>
-            for _, tr := range *td.Rows {
-                @tableRow(tr)
-            }
-        </tbody>
-    }
+	if td.Rows != nil {
+		<tbody>
+			for _, tr := range *td.Rows {
+				@tableRow(tr)
+			}
+		</tbody>
+	}
 }

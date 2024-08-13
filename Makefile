@@ -12,3 +12,9 @@ docker:
 
 podman:
 	podman build -t routehub-client-hub:latest .
+
+keydb:
+	docker run -d --name keydb -p 6379:6379 eqalpha/keydb
+
+keydbPodman:
+	podman run -d --name keydb -p 6379:6379 eqalpha/keydb

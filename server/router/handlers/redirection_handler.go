@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"log/slog"
 	"net/http"
 	"strconv"
 
+	"github.com/RouteHub-Link/routehub.client.hub/server/context"
 	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
 	redirection_pages "github.com/RouteHub-Link/routehub.client.hub/templates/pages/redirections"
 	"github.com/labstack/echo/v4"
@@ -18,16 +20,20 @@ const (
 )
 
 func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
-	key := c.Param("key")
-	// TODO : handle favicon.ico request
+	ctx := c.Request().Context()
 
-	c.Logger().Infof("Key: %s", key)
+	key := c.Param("key")
+
+	cc := c.(*context.CustomContext)
+	logger := cc.GetLogger()
+
+	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("key", key))
 
 	//choice := RedirectionChoiceTimed
 	//choice := RedirectionChoiceConfirm
 	choice := RedirectionChoiceCustom
 
-	c.Logger().Infof("Choice: %s", choice)
+	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("Redirection Choice", choice))
 
 	// TODO : Get the choice from the clients
 	// TODO : Override eh.layoutDescription with the new layout description
