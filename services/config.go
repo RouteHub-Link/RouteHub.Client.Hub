@@ -16,9 +16,8 @@ var (
 )
 
 type ApplicationConfig struct {
-	Redis      *RedisConfig
-	Clickhouse *ClickhouseConfig
-	Details    *DetailsConfig
+	Redis   *RedisConfig
+	Details *DetailsConfig
 }
 
 type RedisConfig struct {
@@ -34,18 +33,12 @@ type DetailsConfig struct {
 	PlatformId     string `env:"PLATFORM_ID"`
 	PlatformSecret string `env:"PLATFORM_SECRET"`
 
+	Name    string `env:"NAME"`
+	Version string `env:"VERSION"`
+
 	SEED        bool        `env:"SEED"`
 	HostingMode HostingMode `env:"HOSTING_MODE"`
-	Name        string      `env:"NAME"`
-	Version     string      `env:"VERSION"`
-}
-
-type ClickhouseConfig struct {
-	Host     string `env:"CLICKHOUSE_HOST"`
-	Port     string `env:"CLICKHOUSE_PORT"`
-	Username string `env:"CLICKHOUSE_USERNAME"`
-	Password string `env:"CLICKHOUSE_PASSWORD"`
-	Database string `env:"CLICKHOUSE_DATABASE"`
+	TimeScaleDB string      `env:"TIMESCALE_DB"`
 }
 
 type HostingMode string
@@ -65,7 +58,6 @@ func getApplicationConfig() *ApplicationConfig {
 		_appConfig = &ApplicationConfig{}
 		_redisConfig := &RedisConfig{}
 		_detailsConfig := &DetailsConfig{}
-		_clickhouseConfig := &ClickhouseConfig{}
 
 		env.Parse(_redisConfig)
 		_appConfig.Redis = _redisConfig
@@ -73,8 +65,6 @@ func getApplicationConfig() *ApplicationConfig {
 		env.Parse(_detailsConfig)
 		_appConfig.Details = _detailsConfig
 
-		env.Parse(_clickhouseConfig)
-		_appConfig.Clickhouse = _clickhouseConfig
 	})
 
 	return _appConfig
@@ -112,13 +102,4 @@ func GetDetailsConfig() DetailsConfig {
 	}
 
 	return *appConfig.Details
-}
-
-func GetClickhouseConfig() ClickhouseConfig {
-	appConfig := getApplicationConfig()
-	if appConfig == nil {
-		logger.Log(context.Background(), slog.LevelError, "Application config is nil")
-	}
-
-	return *appConfig.Clickhouse
 }

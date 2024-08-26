@@ -23,10 +23,7 @@ func main() {
 	packages.NewClientContainer(rc, logger, services.GetDetailsConfig())
 	hostingMode := services.GetHostingMode()
 
-	_, err := services.NewClickhouseClient(ctx, services.GetClickhouseConfig(), services.GetDetailsConfig())
-	if err != nil {
-		logger.Log(ctx, slog.LevelWarn, "Error connecting to clickhouse", slog.String("error", err.Error()))
-	}
+	_ = services.NewTimeScaleClient(ctx, services.GetDetailsConfig().TimeScaleDB)
 
 	switch hostingMode {
 	case services.HostingModeMQQT:

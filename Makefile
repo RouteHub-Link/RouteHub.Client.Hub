@@ -24,3 +24,9 @@ clickhouse:
 
 podmanClickhouse:
 	podman run -d -p 8123:8123 -p 9000:9000  --name clickhouse-server --ulimit nofile=262144:262144 clickhouse/clickhouse-server
+
+timescaledb:
+	docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
+
+podmanTimescaledb:
+	podman run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
