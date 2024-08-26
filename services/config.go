@@ -1,4 +1,4 @@
-package clients
+package services
 
 import (
 	"context"
@@ -16,7 +16,8 @@ var (
 )
 
 type ApplicationConfig struct {
-	Redis *RedisConfig
+	Redis   *RedisConfig
+	Details *DetailsConfig
 }
 
 type RedisConfig struct {
@@ -24,6 +25,13 @@ type RedisConfig struct {
 	Port     string `env:"REDIS_PORT"`
 	Password string `env:"REDIS_PASSWORD"`
 	DB       int    `env:"REDIS_DB"`
+}
+
+type DetailsConfig struct {
+	OrganizationId string `env:"ORGANIZATION_ID"`
+	OwnerId        string `env:"OWNER_ID"`
+	PlatformId     string `env:"PLATFORM_ID"`
+	PlatformSecret string `env:"PLATFORM_SECRET"`
 }
 
 func getApplicationConfig() *ApplicationConfig {
@@ -35,9 +43,13 @@ func getApplicationConfig() *ApplicationConfig {
 
 		_appConfig = &ApplicationConfig{}
 		_redisConfig := &RedisConfig{}
+		_detailsConfig := &DetailsConfig{}
 
 		env.Parse(_redisConfig)
 		_appConfig.Redis = _redisConfig
+
+		env.Parse(_detailsConfig)
+		_appConfig.Details = _detailsConfig
 	})
 
 	return _appConfig
@@ -50,4 +62,13 @@ func GetRedisConfig() RedisConfig {
 	}
 
 	return *appConfig.Redis
+}
+
+func GetDetailsConfig() DetailsConfig {
+	appConfig := getApplicationConfig()
+	if appConfig == nil {
+		logger.Log(context.Background(), slog.LevelError, "Application config is nil")
+	}
+
+	return *appConfig.Details
 }

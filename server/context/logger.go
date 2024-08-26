@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func implementEchoLogger(e *echo.Echo, lc services.LoggerConfigurer) {
+func implementEchoLogger(e *echo.Echo, lc services.LoggerConfigurer, contextKey string) {
 	logger := lc.Logger
 
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
@@ -37,7 +37,7 @@ func implementEchoLogger(e *echo.Echo, lc services.LoggerConfigurer) {
 	// add loger to echo context
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("logger", logger)
+			c.Set(contextKey, logger)
 			return next(c)
 		}
 	})

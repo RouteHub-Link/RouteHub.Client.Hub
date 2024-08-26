@@ -15,9 +15,17 @@ import (
 func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 	ctx := c.Request().Context()
 
+	sec := c.(*context.ServerEchoContext)
+	platformClient := sec.GetPlatformClientService()
+	platform, err := platformClient.GetPlatform(ctx)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
 	key := c.Param("key")
 
-	cc := c.(*context.CustomContext)
+	cc := c.(*context.ServerEchoContext)
 	logger := cc.GetLogger()
 
 	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("key", key))
@@ -56,13 +64,13 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 
 	switch choice {
 	case redirection.OptionTimed:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(eh.layoutDescription, &testTimedDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(*platform.LayoutDescription, &testTimedDesc))
 	case redirection.OptionConfirm:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(eh.layoutDescription, &confirmDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(*platform.LayoutDescription, &confirmDesc))
 	case redirection.OptionDirectHTTP:
 		return HandleDirectRendering(c, redirectionURL)
 	case redirection.OptionCustom:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(eh.layoutDescription, &customDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(*platform.LayoutDescription, &customDesc))
 	default:
 		return c.String(http.StatusBadRequest, "Invalid choice")
 	}

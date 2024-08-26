@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/RouteHub-Link/routehub.client.hub/server/context"
 	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/pages"
@@ -14,8 +15,17 @@ import (
 
 func (eh echoHandlers) PinHandler(c echo.Context) error {
 	pins := getMockData()
+	ctx := c.Request().Context()
 
-	return extensions.Render(c, http.StatusOK, pages.Pins(eh.layoutDescription, pins))
+	sec := c.(*context.ServerEchoContext)
+	platformClient := sec.GetPlatformClientService()
+	platform, err := platformClient.GetPlatform(ctx)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return extensions.Render(c, http.StatusOK, pages.Pins(*platform.LayoutDescription, pins))
 }
 
 func getMockData() []components.PanelDescription {
