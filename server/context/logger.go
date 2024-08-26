@@ -4,12 +4,12 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/RouteHub-Link/routehub.client.hub/clients"
+	"github.com/RouteHub-Link/routehub.client.hub/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func implementEchoLogger(e *echo.Echo, lc clients.LoggerConfigurer) {
+func implementEchoLogger(e *echo.Echo, lc services.LoggerConfigurer) {
 	logger := lc.Logger
 
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{

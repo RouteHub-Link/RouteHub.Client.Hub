@@ -3,7 +3,7 @@ package context
 import (
 	"log/slog"
 
-	"github.com/RouteHub-Link/routehub.client.hub/clients"
+	"github.com/RouteHub-Link/routehub.client.hub/services"
 	"github.com/labstack/echo/v4"
 )
 
@@ -16,7 +16,7 @@ func (cc *CustomContext) GetLogger() *slog.Logger {
 }
 
 func ApplyMiddleware(e *echo.Echo) {
-	lc := clients.NewLoggerConfigurer(slog.LevelInfo)
+	lc := services.NewLoggerConfigurer(slog.LevelInfo)
 	implementEchoLogger(e, lc)
 
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {

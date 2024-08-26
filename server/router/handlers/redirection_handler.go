@@ -5,18 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
+	redirection "github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
 	"github.com/RouteHub-Link/routehub.client.hub/server/context"
 	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
 	redirection_pages "github.com/RouteHub-Link/routehub.client.hub/templates/pages/redirections"
 	"github.com/labstack/echo/v4"
-)
-
-const (
-	RedirectionChoiceTimed   = "timed"
-	RedirectionChoiceDirect  = "direct"
-	RedirectionChoiceConfirm = "confirm"
-	RedirectionChoiceCustom  = "custom"
-	RedirectionChoiceDefault = RedirectionChoiceTimed
 )
 
 func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
@@ -31,9 +24,9 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 
 	//choice := RedirectionChoiceTimed
 	//choice := RedirectionChoiceConfirm
-	choice := RedirectionChoiceCustom
+	choice := redirection.OptionConfirm
 
-	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("Redirection Choice", choice))
+	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("Redirection Choice", choice.String()))
 
 	// TODO : Get the choice from the clients
 	// TODO : Override eh.layoutDescription with the new layout description
@@ -62,13 +55,13 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 	}
 
 	switch choice {
-	case RedirectionChoiceTimed:
+	case redirection.OptionTimed:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(eh.layoutDescription, &testTimedDesc))
-	case RedirectionChoiceConfirm:
+	case redirection.OptionConfirm:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(eh.layoutDescription, &confirmDesc))
-	case RedirectionChoiceDirect:
+	case redirection.OptionDirectHTTP:
 		return HandleDirectRendering(c, redirectionURL)
-	case RedirectionChoiceCustom:
+	case redirection.OptionCustom:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(eh.layoutDescription, &customDesc))
 	default:
 		return c.String(http.StatusBadRequest, "Invalid choice")
