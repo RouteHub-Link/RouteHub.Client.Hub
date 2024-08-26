@@ -1,42 +1,36 @@
 package redirections
 
-import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+import (
+    layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+    "github.com/RouteHub-Link/routehub.client.hub/packages/link"
+)
 
-type TimedDescription struct {
-	Title              string
-	Description        string
-	RedirectionDetails string
-	RedirectionURL     string
-	RedirectionURLText string
-	RedirectionDelay   string
-}
-
-templ Timed(ld layouts.LayoutDescription, td *TimedDescription) {
+templ Timed(ld layouts.LayoutDescription, _link link.Link) {
 	@layouts.Main(layouts.MainDescription{}.
-		SetMainContent(timedPage(td)).
+		SetMainContent(timedPage(_link.Content)).
 		SetLayoutDescription(ld).
-        SetFooter(timedScripts(td.RedirectionDelay, td.RedirectionURL)))
+        SetFooter(timedScripts(_link.Content.RedirectionDelay, _link.Content.RedirectionURL)))
 }
 
-templ timedPage(td *TimedDescription) {
-	if (td != nil) {
+templ timedPage(lc *link.LinkContent) {
+	if (lc != nil) {
 
 		<section class="section">
 			<div class="tile is-parent">
 				<article class="tile is-child box">
 					<div class="content">
-						<p class="title">{ td.Title } Welcome The Hub</p>
-						<p class="subtitle">{ td.Description }</p>
+						<p class="title">{ lc.Title } Welcome The Hub</p>
+						<p class="subtitle">{ lc.Description }</p>
 						<hr/>
 						<div class="content">
-							{ td.RedirectionDetails }
+							{ lc.RedirectionDetails }
 						</div>
 						<div class="content">
 							You will be automatically redirected to
-							<a href={ templ.URL(td.RedirectionURL) }>
-								{ td.RedirectionURLText }
+							<a href={ templ.URL(lc.RedirectionURL) }>
+								{ lc.RedirectionURLText }
 							</a>
-							after <span id="delay">{ td.RedirectionDelay } </span> seconds.
+							after <span id="delay">{ lc.RedirectionDelay } </span> seconds.
 							<p style="font-weight: 200; margin:5px">
 								Click on the link if you are not automatically
 								redirected.

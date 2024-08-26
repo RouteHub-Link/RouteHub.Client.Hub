@@ -22,11 +22,22 @@ const (
 	keyPrefix = "link:"
 )
 
-func NewLinkClientService(rc *redis.Client, logger *slog.Logger) *LinkClientService {
-	return &LinkClientService{
+func NewLinkClientService(rc *redis.Client, logger *slog.Logger, seed bool) *LinkClientService {
+	lcs := &LinkClientService{
 		redisClient: rc,
 		logger:      logger,
 	}
+
+	if seed {
+		ctx := context.Background()
+		lcs.clearLinks(ctx)
+		mockLinks := mockLinks(ctx, logger)
+		for _, link := range mockLinks {
+			lcs.SetLink(ctx, &link)
+		}
+	}
+
+	return lcs
 }
 
 func (lcs *LinkClientService) GetLink(ctx context.Context, key string) (*Link, error) {
@@ -61,9 +72,28 @@ func (lcs *LinkClientService) SetLink(ctx context.Context, link *Link) error {
 		return err
 	}
 
-	concatedKey := strings.Join([]string{keyPrefix, link.ID}, "")
+	concatedKey := strings.Join([]string{keyPrefix, link.Key}, "")
 
 	err = lcs.redisClient.Set(ctx, concatedKey, linkJson, 0).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (lcs *LinkClientService) clearLinks(ctx context.Context) error {
+	lcs.logger.Log(ctx, slog.LevelDebug, "Clearing links")
+	keys, err := lcs.redisClient.Keys(ctx, keyPrefix+"*").Result()
+	if err != nil {
+		return err
+	}
+
+	if len(keys) == 0 {
+		return nil
+	}
+
+	err = lcs.redisClient.Del(ctx, keys...).Err()
 	if err != nil {
 		return err
 	}

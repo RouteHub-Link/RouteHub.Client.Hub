@@ -1,25 +1,25 @@
 package redirections
 
-import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+import (
+    layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+    "github.com/RouteHub-Link/routehub.client.hub/packages/link"
+)
 
-type CustomDescription struct {
-    HTML string
-}
 
-templ Custom(ld layouts.LayoutDescription, cd *CustomDescription) {
+templ Custom(ld layouts.LayoutDescription, _link link.Link) {
     @layouts.Main(layouts.MainDescription{
-        MainContent:       customPage(cd),
+        MainContent:       customPage(_link.Content),
         LayoutDescription: ld,
     })
 }
 
-templ customPage(cd *CustomDescription) {
-    if (cd != nil) {
+templ customPage(lc *link.LinkContent) {
+    if (lc != nil) {
        <section class="section">
 			<div class="tile is-parent">
 				<article class="tile is-child box">
 					<div class="content">
-                        @templ.Raw(cd.HTML)
+                        @templ.Raw(lc.HTML)
 					</div>
 				</article>
 			</div>

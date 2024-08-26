@@ -3,7 +3,6 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
-	"strconv"
 
 	redirection "github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
 	"github.com/RouteHub-Link/routehub.client.hub/server/context"
@@ -25,52 +24,26 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 
 	key := c.Param("key")
 
-	cc := c.(*context.ServerEchoContext)
-	logger := cc.GetLogger()
+	logger := sec.GetLogger()
 
 	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("key", key))
+	lcs := sec.GetLinkClientService()
+	link, err := lcs.GetLink(ctx, key)
 
-	//choice := RedirectionChoiceTimed
-	//choice := RedirectionChoiceConfirm
-	choice := redirection.OptionConfirm
-
-	logger.Log(ctx, slog.LevelDebug, "Handling shorten URL request", slog.String("Redirection Choice", choice.String()))
-
-	// TODO : Get the choice from the clients
-	// TODO : Override eh.layoutDescription with the new layout description
-	redirectionURL := "https://www.google.com"
-
-	testTimedDesc := redirection_pages.TimedDescription{
-		Title:              "We are redirecting you to Google...",
-		Description:        "You will be redirected to Google in 5 seconds.",
-		RedirectionDetails: "Google is a search engine that allows you to search for information on the internet.",
-		RedirectionURL:     redirectionURL,
-		RedirectionURLText: "www.google.com",
-		RedirectionDelay:   strconv.Itoa(5),
+	if err != nil {
+		logger.Log(ctx, slog.LevelInfo, "Link not found", slog.String("key", key))
+		return c.String(http.StatusNotFound, "Link not found")
 	}
 
-	confirmDesc := redirection_pages.ConfirmDescription{
-		PageTitle:          "Confirm Redirect",
-		Title:              "Are you sure you want to redirect to Google?",
-		Description:        "You will be redirected to Google.",
-		RedirectionDetails: "Google is a search engine that allows you to search for information on the internet.",
-		RedirectionURL:     redirectionURL,
-		RedirectionURLText: "www.google.com",
-	}
-
-	customDesc := redirection_pages.CustomDescription{
-		HTML: "<h1>Custom HTML</h1>",
-	}
-
-	switch choice {
+	switch link.Options {
 	case redirection.OptionTimed:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(*platform.LayoutDescription, &testTimedDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(*platform.LayoutDescription, *link))
 	case redirection.OptionConfirm:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(*platform.LayoutDescription, &confirmDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(*platform.LayoutDescription, *link))
 	case redirection.OptionDirectHTTP:
-		return HandleDirectRendering(c, redirectionURL)
+		return HandleDirectRendering(c, link.Content.RedirectionURL)
 	case redirection.OptionCustom:
-		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(*platform.LayoutDescription, &customDesc))
+		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(*platform.LayoutDescription, *link))
 	default:
 		return c.String(http.StatusBadRequest, "Invalid choice")
 	}

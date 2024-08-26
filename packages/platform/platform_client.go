@@ -21,12 +21,22 @@ type PlatformClientService struct {
 	logger     *slog.Logger
 }
 
-func NewPlatformClientService(rc *redis.Client, logger *slog.Logger, platformId string) *PlatformClientService {
-	return &PlatformClientService{
+func NewPlatformClientService(rc *redis.Client, logger *slog.Logger, platformId string, seed bool) *PlatformClientService {
+	ctx := context.Background()
+
+	pcs := &PlatformClientService{
 		redisClient: rc,
 		logger:      logger,
 		platformId:  platformId,
 	}
+
+	if seed {
+		pcs.clearPlatforms(ctx)
+		mockPlatform := MockPlatform()
+		pcs.SetPlatform(ctx, &mockPlatform)
+	}
+
+	return pcs
 }
 
 func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, error) {
@@ -37,16 +47,6 @@ func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, e
 	concatedKey := strings.Join([]string{keyPrefix, pcs.platformId}, "")
 
 	platform, err := pcs.redisClient.Get(ctx, concatedKey).Result()
-	if err == redis.Nil {
-		pcs.logger.LogAttrs(ctx, slog.LevelInfo, "Platform not found in redis", slog.String("platformId", pcs.platformId))
-
-		platform := MockPlatform()
-		pcs.SetPlatform(ctx, &platform)
-
-		pcs.logger.LogAttrs(ctx, slog.LevelInfo, "Platform setting as mock", slog.String("platformId", pcs.platformId))
-
-		return &platform, nil
-	}
 
 	if err != nil {
 		return nil, err
@@ -86,5 +86,24 @@ func (pcs *PlatformClientService) SetPlatform(ctx context.Context, p *Platform) 
 	}
 
 	pcs.logger.Log(ctx, slog.LevelDebug, "Platform set", slog.String("platformId", pcs.platformId), slog.Any("platform", p))
+	return nil
+}
+
+func (pcs *PlatformClientService) clearPlatforms(ctx context.Context) error {
+	pcs.logger.Log(ctx, slog.LevelDebug, "Clearing Platforms")
+	keys, err := pcs.redisClient.Keys(ctx, keyPrefix+"*").Result()
+	if err != nil {
+		return err
+	}
+
+	if len(keys) == 0 {
+		return nil
+	}
+
+	err = pcs.redisClient.Del(ctx, keys...).Err()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

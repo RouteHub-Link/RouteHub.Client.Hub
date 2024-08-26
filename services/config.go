@@ -32,6 +32,7 @@ type DetailsConfig struct {
 	OwnerId        string `env:"OWNER_ID"`
 	PlatformId     string `env:"PLATFORM_ID"`
 	PlatformSecret string `env:"PLATFORM_SECRET"`
+	SEED           bool   `env:"SEED"`
 }
 
 func getApplicationConfig() *ApplicationConfig {

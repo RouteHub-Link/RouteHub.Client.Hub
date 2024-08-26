@@ -24,8 +24,8 @@ type ClientContainer struct {
 func NewClientContainer(rc *redis.Client, logger *slog.Logger, config services.DetailsConfig) *ClientContainer {
 	onceClientContainer.Do(func() {
 		clientContainer = &ClientContainer{
-			LinkClientService:     link.NewLinkClientService(rc, logger),
-			PlatformClientService: platform.NewPlatformClientService(rc, logger, config.PlatformId),
+			LinkClientService:     link.NewLinkClientService(rc, logger, config.SEED),
+			PlatformClientService: platform.NewPlatformClientService(rc, logger, config.PlatformId, config.SEED),
 		}
 	})
 

@@ -1,43 +1,37 @@
 package redirections
 
-import layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
+import (
+	layouts "github.com/RouteHub-Link/routehub.client.hub/templates/layouts" 
+    "github.com/RouteHub-Link/routehub.client.hub/packages/link"
+)
 
-type ConfirmDescription struct {
-	PageTitle          string
-	Title              string
-	Description        string
-	RedirectionDetails string
-	RedirectionURL     string
-	RedirectionURLText string
-}
-
-templ Confirm(ld layouts.LayoutDescription, cd *ConfirmDescription) {
+templ Confirm(ld layouts.LayoutDescription, _link link.Link) {
 	@layouts.Main(layouts.MainDescription{
-		MainContent:       confirmPage(cd),
+		MainContent:       confirmPage(_link.Content),
 		LayoutDescription: ld,
 	})
 }
 
-templ confirmPage(cd *ConfirmDescription) {
-	if (cd != nil) {
+templ confirmPage(lc *link.LinkContent) {
+	if (lc != nil) {
 		<section class="section">
 			<div class="tile is-parent">
 				<article class="tile is-child box">
 					<div class="content">
-						<p class="title">{ cd.Title }</p>
-						<p class="subtitle">{ cd.Description }</p>
+						<p class="title">{ lc.Title }</p>
+						<p class="subtitle">{ lc.Description }</p>
 						<hr/>
 						<div class="content">
-							{ cd.RedirectionDetails }
+							{ lc.RedirectionDetails }
 						</div>
 						<div class="content">
 							We want to redirect you to
 							<span style="font-weight: 200; margin:5px">
-								{ cd.RedirectionURLText }
+								{ lc.RedirectionURLText }
 							</span>
 							<div class=" is-child box">
 								Do you wanna be redirected 
-								<a href={ templ.URL(cd.RedirectionURL) }>
+								<a href={ templ.URL(lc.RedirectionURL) }>
 									Yes
 								</a>
 								or 

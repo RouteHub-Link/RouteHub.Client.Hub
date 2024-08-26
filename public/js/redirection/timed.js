@@ -2,7 +2,7 @@ let durationInSeconds;
 let redirectionURL;
 
 function setDuration(duration) {
-    durationInSeconds = duration;
+    durationInSeconds = duration * 6;
 }
 
 function setRedirectionURL(url) {
