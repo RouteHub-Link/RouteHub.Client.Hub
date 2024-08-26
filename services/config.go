@@ -28,12 +28,20 @@ type RedisConfig struct {
 }
 
 type DetailsConfig struct {
-	OrganizationId string `env:"ORGANIZATION_ID"`
-	OwnerId        string `env:"OWNER_ID"`
-	PlatformId     string `env:"PLATFORM_ID"`
-	PlatformSecret string `env:"PLATFORM_SECRET"`
-	SEED           bool   `env:"SEED"`
+	OrganizationId string      `env:"ORGANIZATION_ID"`
+	OwnerId        string      `env:"OWNER_ID"`
+	PlatformId     string      `env:"PLATFORM_ID"`
+	PlatformSecret string      `env:"PLATFORM_SECRET"`
+	SEED           bool        `env:"SEED"`
+	HostingMode    HostingMode `env:"HOSTING_MODE"`
 }
+
+type HostingMode string
+
+const (
+	HostingModeMQQT HostingMode = "MQQT"
+	HostingModeRest HostingMode = "REST"
+)
 
 func getApplicationConfig() *ApplicationConfig {
 	onceConfigure.Do(func() {
@@ -56,10 +64,21 @@ func getApplicationConfig() *ApplicationConfig {
 	return _appConfig
 }
 
+func GetHostingMode() HostingMode {
+	appConfig := getApplicationConfig()
+	if appConfig == nil {
+		logger.Log(context.Background(), slog.LevelError, "Application config is nil")
+		return HostingModeRest
+	}
+
+	return appConfig.Details.HostingMode
+}
+
 func GetRedisConfig() RedisConfig {
 	appConfig := getApplicationConfig()
 	if appConfig == nil {
 		logger.Log(context.Background(), slog.LevelError, "Application config is nil")
+		return RedisConfig{} // Return a default RedisConfig if appConfig is nil
 	}
 
 	return *appConfig.Redis

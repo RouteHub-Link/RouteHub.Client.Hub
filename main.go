@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/RouteHub-Link/routehub.client.hub/mq"
 	"github.com/RouteHub-Link/routehub.client.hub/packages"
 	"github.com/RouteHub-Link/routehub.client.hub/server"
 	"github.com/RouteHub-Link/routehub.client.hub/services"
@@ -20,6 +21,14 @@ func main() {
 	rc := services.NewRedisClient(ctx, cf)
 
 	packages.NewClientContainer(rc, logger, services.GetDetailsConfig())
+	hostingMode := services.GetHostingMode()
+	switch hostingMode {
+	case services.HostingModeMQQT:
+		logger.Log(ctx, slog.LevelDebug, "MQQT Hosting Mode")
+		mq.NewMQQTServer()
+	case services.HostingModeRest:
+		logger.Log(ctx, slog.LevelDebug, "Rest Hosting Mode")
+		server.Serve()
+	}
 
-	server.Serve()
 }
