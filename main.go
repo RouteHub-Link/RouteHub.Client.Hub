@@ -22,6 +22,12 @@ func main() {
 
 	packages.NewClientContainer(rc, logger, services.GetDetailsConfig())
 	hostingMode := services.GetHostingMode()
+
+	_, err := services.NewClickhouseClient(ctx, services.GetClickhouseConfig(), services.GetDetailsConfig())
+	if err != nil {
+		logger.Log(ctx, slog.LevelWarn, "Error connecting to clickhouse", slog.String("error", err.Error()))
+	}
+
 	switch hostingMode {
 	case services.HostingModeMQQT:
 		logger.Log(ctx, slog.LevelDebug, "MQQT Hosting Mode")
@@ -29,6 +35,8 @@ func main() {
 	case services.HostingModeRest:
 		logger.Log(ctx, slog.LevelDebug, "Rest Hosting Mode")
 		server.Serve()
+	default:
+		logger.Log(ctx, slog.LevelError, "Invalid hosting mode")
 	}
 
 }
