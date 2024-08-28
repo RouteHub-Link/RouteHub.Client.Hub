@@ -16,6 +16,7 @@ var (
 
 func NewRedisClient(ctx context.Context, cr RedisConfig) *redis.Client {
 	onceRedisClient.Do(func() {
+		logger.Log(ctx, slog.LevelInfo, "Connecting to redis", slog.String("host", cr.Host), slog.String("port", cr.Port), slog.String("password", cr.Password), slog.Int("db", cr.DB))
 		addr := strings.Join([]string{cr.Host, cr.Port}, ":")
 
 		redisClient = redis.NewClient(&redis.Options{
@@ -27,6 +28,7 @@ func NewRedisClient(ctx context.Context, cr RedisConfig) *redis.Client {
 		_, err := redisClient.Ping(ctx).Result()
 		if err != nil {
 			logger.Log(ctx, slog.LevelError, "Error pinging redis", slog.String("error", err.Error()))
+			panic(err)
 		} else {
 			logger.Log(ctx, slog.LevelInfo, "Redis connected", slog.String("addr", addr))
 		}

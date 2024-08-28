@@ -44,7 +44,7 @@ type DetailsConfig struct {
 type HostingMode string
 
 const (
-	HostingModeMQQT HostingMode = "MQQT"
+	HostingModeMQTT HostingMode = "MQTT"
 	HostingModeRest HostingMode = "REST"
 )
 

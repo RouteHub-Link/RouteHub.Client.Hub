@@ -23,8 +23,15 @@ type ClientContainer struct {
 
 func NewClientContainer(rc *redis.Client, logger *slog.Logger, config services.DetailsConfig) *ClientContainer {
 	onceClientContainer.Do(func() {
+		var lcs *link.LinkClientService
+		if config.SEED {
+			lcs = link.NewLinkClientServiceWithSeed(rc, logger)
+		} else {
+			lcs = link.NewLinkClientService(rc, logger)
+		}
+
 		clientContainer = &ClientContainer{
-			LinkClientService:     link.NewLinkClientService(rc, logger, config.SEED),
+			LinkClientService:     lcs,
 			PlatformClientService: platform.NewPlatformClientService(rc, logger, config.PlatformId, config.SEED),
 		}
 	})

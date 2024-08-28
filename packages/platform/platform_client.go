@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log/slog"
+	"os"
 	"strings"
 
 	"github.com/redis/go-redis/v9"
@@ -37,6 +38,11 @@ func NewPlatformClientService(rc *redis.Client, logger *slog.Logger, platformId 
 	}
 
 	return pcs
+}
+
+func NewPlatformClientServiceDefault(rc *redis.Client, logger *slog.Logger) *PlatformClientService {
+	platformId := os.Getenv("PLATFORM_ID")
+	return NewPlatformClientService(rc, logger, platformId, false)
 }
 
 func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, error) {
