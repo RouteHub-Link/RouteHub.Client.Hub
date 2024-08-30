@@ -16,9 +16,9 @@ func (h *MQTTHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet
 		h.Log.Info("received modified packet from client", "client", cl.ID, "payload", string(pkx.Payload))
 	}
 
-	mqEvent := MQEvent(pk.TopicName)
+	mqTopic := MQTopic(pk.TopicName)
 
-	if !mqEvent.IsValid() {
+	if !mqTopic.IsValid() {
 		h.Log.Error("invalid event", "event", string(pk.Payload))
 		pkx := pk
 		pkx.Payload = []byte("invalid event")
@@ -28,7 +28,7 @@ func (h *MQTTHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet
 
 	var err error
 
-	switch mqEvent {
+	switch mqTopic {
 	case MQE_LINK_SET:
 		err = h.LinkHandler.Set(pk.Payload)
 	case MQE_LINK_DEL:

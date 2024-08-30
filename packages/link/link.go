@@ -14,13 +14,13 @@ type Link struct {
 }
 
 type LinkContent struct {
-	PageTitle          string
 	Title              string
-	Description        string
-	RedirectionDetails string
+	Subtitle           string
+	ContentContainer   string
 	RedirectionURL     string
 	RedirectionURLText string
 	RedirectionDelay   string
-	HTML               string
 	MetaDescription    *components.MetaDescription
+	AdditionalHead     *string
+	AdditionalFooter   *string
 }

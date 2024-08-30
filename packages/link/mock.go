@@ -18,8 +18,8 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 	timedKey := strings.Join([]string{"test", cusrand.UniqueRandomString(4)}, "-")
 	testTimedDesc := LinkContent{
 		Title:              "We are redirecting you to Google...",
-		Description:        "You will be redirected to Google in 5 seconds.",
-		RedirectionDetails: "Google is a search engine that allows you to search for information on the internet.",
+		Subtitle:           "You will be redirected to Google in 5 seconds.",
+		ContentContainer:   "Google is a search engine that allows you to search for information on the internet.",
 		RedirectionURL:     redirectionURL,
 		RedirectionURLText: "www.google.com",
 		RedirectionDelay:   strconv.Itoa(30),
@@ -27,17 +27,16 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 
 	confirmKey := strings.Join([]string{"test", cusrand.UniqueRandomString(4)}, "-")
 	confirmDesc := LinkContent{
-		PageTitle:          "Confirm Redirect",
 		Title:              "Are you sure you want to redirect to Google?",
-		Description:        "You will be redirected to Google.",
-		RedirectionDetails: "Google is a search engine that allows you to search for information on the internet.",
+		Subtitle:           "You will be redirected to Google.",
+		ContentContainer:   "Google is a search engine that allows you to search for information on the internet.",
 		RedirectionURL:     redirectionURL,
 		RedirectionURLText: "www.google.com",
 	}
 
 	customKey := strings.Join([]string{"test", cusrand.UniqueRandomString(4)}, "-")
 	customDesc := LinkContent{
-		HTML: "<h1>Custom HTML</h1>",
+		ContentContainer: "<h1>Custom HTML</h1>",
 	}
 
 	links = append(links, Link{ID: uuid.New(), Key: timedKey, Options: redirection.OptionTimed, Content: &testTimedDesc})

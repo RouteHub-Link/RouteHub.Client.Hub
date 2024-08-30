@@ -19,11 +19,11 @@ templ timedPage(lc *link.LinkContent) {
 			<div class="tile is-parent">
 				<article class="tile is-child box">
 					<div class="content">
-						<p class="title">{ lc.Title } Welcome The Hub</p>
-						<p class="subtitle">{ lc.Description }</p>
+						<p class="title">{ lc.Title }</p>
+						<p class="subtitle">{ lc.Subtitle }</p>
 						<hr/>
 						<div class="content">
-							{ lc.RedirectionDetails }
+							{ lc.ContentContainer }
 						</div>
 						<div class="content">
 							You will be automatically redirected to

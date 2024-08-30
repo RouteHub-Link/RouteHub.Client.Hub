@@ -19,7 +19,7 @@ templ customPage(lc *link.LinkContent) {
 			<div class="tile is-parent">
 				<article class="tile is-child box">
 					<div class="content">
-                        @templ.Raw(lc.HTML)
+                        @templ.Raw(lc.ContentContainer)
 					</div>
 				</article>
 			</div>
