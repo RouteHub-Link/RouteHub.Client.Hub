@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-rest
+  labels:
+    {{- include "routehub-client.labels" . | nindent 4 }}
+    component: rest
+spec:
+  type: {{ .Values.routehubClientRest.service.type }}
+  ports:
+    - port: {{ .Values.routehubClientRest.service.port }}
+      targetPort: 8080
+  selector:
+    {{- include "routehub-client.labels" . | nindent 4 }}
+    component: rest

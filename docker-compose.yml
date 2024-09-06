@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  routehubclient-rest:
+    image: routehub-client-hub:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 8080
+    environment:
+      - HOSTING_MODE=REST
+      - REDIS_HOST=rotehub-redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      # Deployer Informations
+      - ORGANIZATION_ID=${ORGANIZATION_ID}
+      - OWNER_ID=${OWNER_ID}
+      - PLATFORM_ID=${PLATFORM_ID}
+      - PLATFORM_SECRET=${PLATFORM_SECRET}
+       # Application Detail Configuration
+      - SEED=${APP_SEED}
+      - Name=${APP_NAME}
+      - Version=${APP_VERSION}
+      - TimeScale_DB=postgres://postgres:password@routehub-timescale/postgres
+    depends_on:
+      - routehub-timescale
+      - rotehub-redis
+      - routehubclient-mqtt
+  
+  routehubclient-mqtt:
+     image: routehub-client-hub:latest
+     build:
+        context: .
+        dockerfile: ./Dockerfile
+     expose:
+       - 1883
+     environment:
+       - HOSTING_MODE=MQTT
+       - REDIS_HOST=rotehub-redis
+       - REDIS_PORT=6379
+       - REDIS_PASSWORD=
+       - REDIS_DB=0
+     depends_on:
+        - rotehub-redis
+  
+  routehub-timescale:
+    image: timescale/timescaledb-ha:pg16
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    expose:
+      - 5432
+
+  rotehub-redis:
+    image: eqalpha/keydb
+    expose:
+      - 6379

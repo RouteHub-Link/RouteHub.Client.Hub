@@ -3,7 +3,6 @@ package link
 import (
 	"context"
 	"log/slog"
-	"strconv"
 	"strings"
 
 	"github.com/RouteHub-Link/routehub.client.hub/packages/cusrand"
@@ -20,17 +19,15 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 		Title:              "We are redirecting you to Google...",
 		Subtitle:           "You will be redirected to Google in 5 seconds.",
 		ContentContainer:   "Google is a search engine that allows you to search for information on the internet.",
-		RedirectionURL:     redirectionURL,
 		RedirectionURLText: "www.google.com",
-		RedirectionDelay:   strconv.Itoa(30),
 	}
+	testTimedDesc.SetRedirectionDelay(5)
 
 	confirmKey := strings.Join([]string{"test", cusrand.UniqueRandomString(4)}, "-")
 	confirmDesc := LinkContent{
 		Title:              "Are you sure you want to redirect to Google?",
 		Subtitle:           "You will be redirected to Google.",
 		ContentContainer:   "Google is a search engine that allows you to search for information on the internet.",
-		RedirectionURL:     redirectionURL,
 		RedirectionURLText: "www.google.com",
 	}
 
@@ -39,9 +36,9 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 		ContentContainer: "<h1>Custom HTML</h1>",
 	}
 
-	links = append(links, Link{ID: uuid.New(), Key: timedKey, Options: redirection.OptionTimed, Content: &testTimedDesc})
-	links = append(links, Link{ID: uuid.New(), Key: confirmKey, Options: redirection.OptionConfirm, Content: &confirmDesc})
-	links = append(links, Link{ID: uuid.New(), Key: customKey, Options: redirection.OptionCustom, Content: &customDesc})
+	links = append(links, Link{ID: uuid.New(), Key: timedKey, Target: redirectionURL, Options: redirection.OptionTimed, Content: &testTimedDesc})
+	links = append(links, Link{ID: uuid.New(), Key: confirmKey, Target: redirectionURL, Options: redirection.OptionConfirm, Content: &confirmDesc})
+	links = append(links, Link{ID: uuid.New(), Key: customKey, Target: redirectionURL, Options: redirection.OptionCustom, Content: &customDesc})
 
 	logger.Log(ctx, slog.LevelInfo, "Links are setted from mock", slog.String("timed Key:", timedKey), slog.String("confirm Key:", confirmKey), slog.String("custom Key:", customKey))
 	return links

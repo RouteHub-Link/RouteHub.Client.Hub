@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-timescale
+  labels:
+    {{- include "routehub-client.labels" . | nindent 4 }}
+    component: timescale
+spec:
+  replicas: {{ .Values.timescale.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "routehub-client.labels" . | nindent 6 }}
+      component: timescale
+  template:
+    metadata:
+      labels:
+        {{- include "routehub-client.labels" . | nindent 8 }}
+        component: timescale
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-timescale
+          image: "{{ .Values.timescale.image.repository }}:{{ .Values.timescale.image.tag }}"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config

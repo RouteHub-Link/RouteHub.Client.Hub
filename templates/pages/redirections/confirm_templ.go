@@ -32,7 +32,7 @@ func Confirm(ld layouts.LayoutDescription, _link link.Link) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = layouts.Main(layouts.MainDescription{
-			MainContent:       confirmPage(_link.Content),
+			MainContent:       confirmPage(_link.Content, _link.Target),
 			LayoutDescription: ld,
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
@@ -42,7 +42,7 @@ func Confirm(ld layouts.LayoutDescription, _link link.Link) templ.Component {
 	})
 }
 
-func confirmPage(lc *link.LinkContent) templ.Component {
+func confirmPage(lc *link.LinkContent, target string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -117,7 +117,7 @@ func confirmPage(lc *link.LinkContent) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var7 templ.SafeURL = templ.URL(lc.RedirectionURL)
+			var templ_7745c5c3_Var7 templ.SafeURL = templ.URL(target)
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

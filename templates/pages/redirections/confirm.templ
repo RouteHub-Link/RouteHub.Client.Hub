@@ -7,12 +7,12 @@ import (
 
 templ Confirm(ld layouts.LayoutDescription, _link link.Link) {
 	@layouts.Main(layouts.MainDescription{
-		MainContent:       confirmPage(_link.Content),
+		MainContent:       confirmPage(_link.Content, _link.Target),
 		LayoutDescription: ld,
 	})
 }
 
-templ confirmPage(lc *link.LinkContent) {
+templ confirmPage(lc *link.LinkContent, target string) {
 	if (lc != nil) {
 		<section class="section">
 			<div class="tile is-parent">
@@ -31,7 +31,7 @@ templ confirmPage(lc *link.LinkContent) {
 							</span>
 							<div class=" is-child box">
 								Do you wanna be redirected 
-								<a href={ templ.URL(lc.RedirectionURL) }>
+								<a href={ templ.URL(target) }>
 									Yes
 								</a>
 								or 

@@ -2,6 +2,7 @@ package mq
 
 import (
 	"fmt"
+	"strings"
 
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
@@ -16,7 +17,7 @@ func (h *MQTTHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet
 		h.Log.Info("received modified packet from client", "client", cl.ID, "payload", string(pkx.Payload))
 	}
 
-	mqTopic := MQTopic(pk.TopicName)
+	mqTopic := MQTopic(strings.TrimPrefix(pk.TopicName, "topic/"))
 
 	if !mqTopic.IsValid() {
 		h.Log.Error("invalid event", "event", string(pk.Payload))

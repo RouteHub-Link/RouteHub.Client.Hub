@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  REDIS_HOST: "{{ .Release.Name }}-redis"
+  REDIS_PORT: "{{ .Values.global.redis.PORT }}"
+  REDIS_PASSWORD: "{{ .Values.global.redis.PASSWORD }}"
+  REDIS_DB: "{{ .Values.global.redis.DB }}"
+  ORGANIZATION_ID: "{{ .Values.routehubClientRest.environment.ORGANIZATION_ID }}"
+  OWNER_ID: "{{ .Values.routehubClientRest.environment.OWNER_ID }}"
+  PLATFORM_ID: "{{ .Values.routehubClientRest.environment.PLATFORM_ID }}"
+  SEED: "{{ .Values.routehubClientRest.environment.SEED }}"
+  Name: "{{ .Values.routehubClientRest.environment.Name }}"
+  Version: "{{ .Values.routehubClientRest.environment.Version }}"
+  TimeScale_DB: "postgres://postgres:password@{{ .Release.Name }}-timescale/postgres"
+  POSTGRES_PASSWORD: "{{ .Values.timescale.environment.POSTGRES_PASSWORD }}"
+  POSTGRES_USER: "{{ .Values.timescale.environment.POSTGRES_USER }}"
+  POSTGRES_DB: "{{ .Values.timescale.environment.POSTGRES_DB }}"

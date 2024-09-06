@@ -32,9 +32,9 @@ func Timed(ld layouts.LayoutDescription, _link link.Link) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = layouts.Main(layouts.MainDescription{}.
-			SetMainContent(timedPage(_link.Content)).
+			SetMainContent(timedPage(_link.Content, _link.Target)).
 			SetLayoutDescription(ld).
-			SetFooter(timedScripts(_link.Content.RedirectionDelay, _link.Content.RedirectionURL))).Render(ctx, templ_7745c5c3_Buffer)
+			SetFooter(timedScripts(_link.Content.GetRedirectionDelay(), _link.Target))).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -42,7 +42,7 @@ func Timed(ld layouts.LayoutDescription, _link link.Link) templ.Component {
 	})
 }
 
-func timedPage(lc *link.LinkContent) templ.Component {
+func timedPage(lc *link.LinkContent, target string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -104,7 +104,7 @@ func timedPage(lc *link.LinkContent) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var6 templ.SafeURL = templ.URL(lc.RedirectionURL)
+			var templ_7745c5c3_Var6 templ.SafeURL = templ.URL(target)
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var6)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -127,9 +127,9 @@ func timedPage(lc *link.LinkContent) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(lc.RedirectionDelay)
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(lc.GetRedirectionDelay())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/redirections/timed.templ`, Line: 33, Col: 51}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/redirections/timed.templ`, Line: 33, Col: 56}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {

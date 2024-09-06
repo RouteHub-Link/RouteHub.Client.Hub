@@ -1,5 +1,5 @@
-serve:
-	go run .
+serve-rest:
+	HOSTING_MODE=REST go run .
 
 serve-mqtt:
 	HOSTING_MODE=MQTT go run .
@@ -15,6 +15,10 @@ docker:
 
 podman:
 	podman build -t routehub-client-hub:latest .
+
+podman-build-push-registry.guneskorkaz.net:
+	podman build -t registry.guneskorkmaz.net/routehub-client-hub:latest .
+	podman push registry.guneskorkmaz.net/routehub-client-hub:latest
 
 podman-serve-mqtt:
 	make podman

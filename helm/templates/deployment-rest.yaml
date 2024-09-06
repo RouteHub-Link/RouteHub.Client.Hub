@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-rest
+  labels:
+    {{- include "routehub-client.labels" . | nindent 4 }}
+    component: rest
+spec:
+  replicas: {{ .Values.routehubClientRest.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "routehub-client.labels" . | nindent 6 }}
+      component: rest
+  template:
+    metadata:
+      labels:
+        {{- include "routehub-client.labels" . | nindent 8 }}
+        component: rest
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-rest
+          image: "{{ .Values.global.customRegistry }}{{ .Values.routehubClientRest.image.repository }}:{{ .Values.routehubClientRest.image.tag }}"
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.routehubClientRest.livenessProbe.path }}
+              port: {{ .Values.routehubClientRest.livenessProbe.port }}
+              scheme: HTTP
+            failureThreshold: {{ .Values.routehubClientRest.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.routehubClientRest.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.routehubClientRest.livenessProbe.initialDelaySeconds }}

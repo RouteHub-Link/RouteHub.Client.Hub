@@ -13,9 +13,12 @@ func main() {
 	ctx := context.Background()
 	services.NewLoggerConfigurer(slog.LevelDebug)
 	logger := services.GetLogger()
+
 	hostingMode := services.GetHostingMode()
+
 	cf := services.GetRedisConfig()
 	logger.Log(ctx, slog.LevelDebug, "redis config", slog.String("host", cf.Host), slog.String("port", cf.Port), slog.String("password", cf.Password), slog.Int("db", cf.DB))
+
 	rc := services.NewRedisClient(ctx, cf)
 
 	switch hostingMode {

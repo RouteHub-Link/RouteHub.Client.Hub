@@ -41,7 +41,7 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 	case redirection.OptionConfirm:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(*platform.LayoutDescription, *link))
 	case redirection.OptionDirectHTTP:
-		return HandleDirectRendering(c, link.Content.RedirectionURL)
+		return HandleDirectRendering(c, link.Target)
 	case redirection.OptionCustom:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(*platform.LayoutDescription, *link))
 	default:

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mqtt
+  labels:
+    {{- include "routehub-client.labels" . | nindent 4 }}
+    component: mqtt
+spec:
+  replicas: {{ .Values.routehubClientMqtt.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "routehub-client.labels" . | nindent 6 }}
+      component: mqtt
+  template:
+    metadata:
+      labels:
+        {{- include "routehub-client.labels" . | nindent 8 }}
+        component: mqtt
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Always
+      containers:
+        - name: {{ .Chart.Name }}-mqtt
+          image: "{{ .Values.global.customRegistry }}{{ .Values.routehubClientMqtt.image.repository }}:{{ .Values.routehubClientMqtt.image.tag }}"
+          ports:
+            - containerPort: 1883
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+          env:
+            - name: HOSTING_MODE
+              value: {{ .Values.routehubClientMqtt.environment.HOSTING_MODE }}

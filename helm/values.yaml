@@ -1,0 +1,61 @@
+# Default values for routehub-client
+global:
+  customRegistry: ""
+  imagePullSecrets:
+    - name: 
+  redis:
+    HOST: "{{ .Release.Name }}-redis"  
+    PORT: 6379
+    PASSWORD: ""
+    DB: 0
+
+routehubClientRest:
+  image:
+    repository: routehub-client-hub
+    tag: latest
+  replicaCount: 1
+  service:
+    type: LoadBalancer
+    port: 8080
+  livenessProbe:
+    path: /
+    port: 8080
+    failureThreshold: 3
+    periodSeconds: 120
+    initialDelaySeconds: 30
+  environment:
+    HOSTING_MODE: REST
+
+routehubClientMqtt:
+  image:
+    repository: routehub-client-hub
+    tag: latest
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 1883
+  environment:
+    HOSTING_MODE: MQTT
+
+
+timescale:
+  image:
+    repository: timescale/timescaledb-ha
+    tag: pg16
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 5432
+  environment:
+    POSTGRES_PASSWORD: password
+    POSTGRES_USER: postgres
+    POSTGRES_DB: postgres
+
+redis:
+  image:
+    repository: eqalpha/keydb
+    tag: latest
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 6379

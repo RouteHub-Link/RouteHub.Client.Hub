@@ -24,7 +24,7 @@ type MQTTHook struct {
 }
 
 func (h *MQTTHook) ID() string {
-	return "events-example"
+	return "platform-link-hooks"
 }
 
 func (h *MQTTHook) Provides(b byte) bool {
@@ -64,13 +64,13 @@ func (h *MQTTHook) OnConnect(cl *mqtt.Client, pk packets.Packet) error {
 	h.Log.Info("client connected", "client", cl.ID)
 
 	// Example demonstrating how to subscribe to a topic within the hook.
-	h.config.Server.Subscribe("hook/direct/publish", 1, h.subscribeCallback)
+	//h.config.Server.Subscribe("hook/direct/publish", 1, h.subscribeCallback)
 
 	// Example demonstrating how to publish a message within the hook
-	err := h.config.Server.Publish("hook/direct/publish", []byte("packet hook message"), false, 0)
-	if err != nil {
-		h.Log.Error("hook.publish", "error", err)
-	}
+	//err := h.config.Server.Publish("hook/direct/publish", []byte("packet hook message"), false, 0)
+	//if err != nil {
+	//	h.Log.Error("hook.publish", "error", err)
+	//}
 
 	return nil
 }
