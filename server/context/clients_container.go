@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func implementClientsContainer(e *echo.Echo, cc *packages.ClientContainer, contextKey string) {
+func implementClientsContainer(e *echo.Echo, cc *packages.MQTTClientContainer, contextKey string) {
 	// add loger to echo context
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
