@@ -29,8 +29,6 @@ func NewTimeScaleClient(ctx context.Context, cstr string) *pgxpool.Pool {
 		}
 		logger.Log(ctx, slog.LevelInfo, "Timescale greeting", slog.String("greeting", greeting))
 
-		// TODO - Create tables if they don't exist
-
 		TimeScaleClient = dbpool
 	})
 
