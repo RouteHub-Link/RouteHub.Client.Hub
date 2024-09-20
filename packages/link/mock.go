@@ -41,5 +41,9 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 	links = append(links, Link{ID: uuid.New(), Key: customKey, Target: redirectionURL, Options: redirection.OptionCustom, Content: &customDesc})
 
 	logger.Log(ctx, slog.LevelInfo, "Links are setted from mock", slog.String("timed Key:", timedKey), slog.String("confirm Key:", confirmKey), slog.String("custom Key:", customKey))
+	logger.Log(ctx, slog.LevelInfo, "Timed Link", slog.String("Key:", timedKey))
+	logger.Log(ctx, slog.LevelInfo, "Confirm Link", slog.String("Key:", confirmKey))
+	logger.Log(ctx, slog.LevelInfo, "Custom Link", slog.String("Key:", customKey))
+
 	return links
 }
