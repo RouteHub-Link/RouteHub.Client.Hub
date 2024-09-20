@@ -12,17 +12,20 @@ import (
 )
 
 var (
-	clientContainer     *ClientContainer
-	onceClientContainer sync.Once
+	mqttClientContainer     *MQTTClientContainer
+	onceMQTTClientContainer sync.Once
 )
 
-type ClientContainer struct {
+type MQTTClientContainer struct {
 	LinkClientService     *link.LinkClientService
 	PlatformClientService *platform.PlatformClientService
 }
 
-func NewClientContainer(rc *redis.Client, logger *slog.Logger, config services.DetailsConfig) *ClientContainer {
-	onceClientContainer.Do(func() {
+func NewMQTTClientContainer(rc *redis.Client, logger *slog.Logger, config services.DetailsConfig) *MQTTClientContainer {
+	onceMQTTClientContainer.Do(func() {
+		var pcs *platform.PlatformClientService
+		pcs = platform.NewPlatformClientService(rc, logger, config.PlatformId, config.SEED)
+
 		var lcs *link.LinkClientService
 		if config.SEED {
 			lcs = link.NewLinkClientServiceWithSeed(rc, logger)
@@ -30,19 +33,19 @@ func NewClientContainer(rc *redis.Client, logger *slog.Logger, config services.D
 			lcs = link.NewLinkClientService(rc, logger)
 		}
 
-		clientContainer = &ClientContainer{
+		mqttClientContainer = &MQTTClientContainer{
 			LinkClientService:     lcs,
-			PlatformClientService: platform.NewPlatformClientService(rc, logger, config.PlatformId, config.SEED),
+			PlatformClientService: pcs,
 		}
 	})
 
-	return clientContainer
+	return mqttClientContainer
 }
 
-func GetClientContainer() (*ClientContainer, error) {
-	if clientContainer == nil {
+func GetClientContainer() (*MQTTClientContainer, error) {
+	if mqttClientContainer == nil {
 		return nil, errors.New("client container is nil")
 	}
 
-	return clientContainer, nil
+	return mqttClientContainer, nil
 }
