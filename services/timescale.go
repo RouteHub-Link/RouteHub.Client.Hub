@@ -21,7 +21,6 @@ func NewTimeScaleClient(ctx context.Context, cstr string) *pgxpool.Pool {
 		if err != nil {
 			logger.Log(ctx, slog.LevelError, "Error connecting to timescale", slog.String("error", err.Error()))
 		}
-		defer dbpool.Close()
 
 		var greeting string
 		err = dbpool.QueryRow(ctx, "select 'Hello, Timescale!'").Scan(&greeting)
