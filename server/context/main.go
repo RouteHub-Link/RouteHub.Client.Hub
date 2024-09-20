@@ -43,8 +43,8 @@ func (cc *ServerEchoContext) GetLogger() *slog.Logger {
 	return cc.Get(loggerKey).(*slog.Logger)
 }
 
-func (cc *ServerEchoContext) getClientContainer() *packages.ClientContainer {
-	return cc.Get(clientServicesKey).(*packages.ClientContainer)
+func (cc *ServerEchoContext) getClientContainer() *packages.MQTTClientContainer {
+	return cc.Get(clientServicesKey).(*packages.MQTTClientContainer)
 }
 
 func (cc *ServerEchoContext) GetLinkClientService() *link.LinkClientService {
