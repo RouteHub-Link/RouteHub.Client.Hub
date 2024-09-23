@@ -13,12 +13,13 @@ templ:
 docker:
 	docker build -t routehub-client-hub:latest .
 
+docker-serve-mqtt:
+	make docker
+	docker rm -f routehub-client-hub-mqtt || true
+	docker run -d --name routehub-client-hub-mqtt --env-file ./.env -e HOSTING_MODE=MQTT --net=host  routehub-client-hub:latest
+
 podman:
 	podman build -t routehub-client-hub:latest .
-
-podman-build-push-registry.guneskorkaz.net:
-	podman build -t registry.guneskorkmaz.net/routehub-client-hub:latest .
-	podman push registry.guneskorkmaz.net/routehub-client-hub:latest
 
 podman-serve-mqtt:
 	make podman
@@ -28,11 +29,11 @@ podman-serve-mqtt:
 keydb:
 	docker run -d --name keydb -p 6379:6379 eqalpha/keydb
 
-keydbPodman:
+podman-keydb:
 	podman run -d --name keydb -p 6379:6379 eqalpha/keydb
 
 timescaledb:
 	docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
 
-podmanTimescaledb:
+podman-Timescaledb:
 	podman run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
