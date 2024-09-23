@@ -38,7 +38,7 @@ make keydb
 make timescaledb
 ```
 
-If you use podman you can uss podman- as prefix. For example;
+If you use podman you can use podman- as prefix. For example;
 
 ```bash
 make podman-keydb
