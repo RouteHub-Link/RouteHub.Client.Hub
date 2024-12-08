@@ -53,7 +53,23 @@ make podman-keydb
 
 ## Deployment
 
+### HELM
+
 Please check out the helm chart for deployment. [RouteHub-Link/RouteHub.Helm](https://github.com/RouteHub-Link/RouteHub.HELM/blob/main/charts/routehub-server/readme.md)
+
+### Docker Compose
+
+```bash
+# Clone the project
+git clone https://github.com/RouteHub-Link/RouteHub.Client.Hub
+cd RouteHub.Client.Hub
+
+# Copy .env.development to .env
+cp .env.development .env
+
+# Run the services
+docker-compose up docker-compose.hosted.yml
+```
 
 ## Technologies
 
