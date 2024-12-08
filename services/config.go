@@ -70,12 +70,15 @@ func getApplicationConfig() *ApplicationConfig {
 
 		env.Parse(_redisConfig)
 		_appConfig.Redis = _redisConfig
+		logger.Log(context.Background(), slog.LevelDebug, "Redis config", slog.Any("config", _redisConfig))
 
 		env.Parse(_detailsConfig)
 		_appConfig.Details = _detailsConfig
+		logger.Log(context.Background(), slog.LevelDebug, "Details config", slog.Any("config", _detailsConfig))
 
 		env.Parse(_analyticsConfig)
 		_appConfig.Analytics = _analyticsConfig
+		logger.Log(context.Background(), slog.LevelDebug, "Analytics config", slog.Any("config", _analyticsConfig))
 	})
 
 	return _appConfig

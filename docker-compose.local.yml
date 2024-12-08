@@ -23,7 +23,7 @@ services:
       - SEED=${APP_SEED}
       - Name=${APP_NAME}
       - Version=${APP_VERSION}
-      - TimeScale_DB=postgres://postgres:password@routehub-timescale/postgres
+      - TIMESCALE_DB=postgres://postgres:password@routehub-timescale:5432/postgres
     depends_on:
       - routehub-timescale
       - rotehub-redis
