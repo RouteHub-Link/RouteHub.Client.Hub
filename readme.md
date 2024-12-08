@@ -68,7 +68,7 @@ cd RouteHub.Client.Hub
 cp .env.development .env
 
 # Run the services
-docker-compose up docker-compose.hosted.yml
+docker compose -f "docker-compose.hosted.yml" up -d --build
 ```
 
 ## Technologies
