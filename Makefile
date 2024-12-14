@@ -26,14 +26,30 @@ podman-serve-mqtt:
 	podman rm -f routehub-client-hub-mqtt || true
 	podman run -d --name routehub-client-hub-mqtt --env-file ./.env -e HOSTING_MODE=MQTT --net=host  routehub-client-hub:latest
 
-keydb:
-	docker run -d --name keydb -p 6379:6379 eqalpha/keydb
 
 podman-keydb:
 	podman run -d --name keydb -p 6379:6379 eqalpha/keydb
 
-timescaledb:
-	docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
 
 podman-Timescaledb:
 	podman run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
+
+# Different Port Setup
+
+keydb:
+	docker run -d --name keydb -p 6380:6379 eqalpha/keydb
+
+timescaledb:
+	docker run -d --name timescaledb -p 5532:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
+
+serve-mqtt-bash:
+	bash -c "export REDIS_PORT=6380 && export HOSTING_MODE=MQTT && go run ."
+
+serve-rest-bash:
+	bash -c "export REDIS_PORT=6380 && \
+	 export HOSTING_MODE=REST && \
+	 export TIMESCALE_DB=postgres://postgres:password@localhost:5532/postgres && \
+	 export PORT=8088 && \
+	 go run ."
+
+

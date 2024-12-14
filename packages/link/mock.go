@@ -6,8 +6,7 @@ import (
 	"strings"
 
 	"github.com/RouteHub-Link/routehub.client.hub/packages/cusrand"
-	"github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
-	"github.com/google/uuid"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
 )
 
 func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
@@ -36,9 +35,9 @@ func mockLinks(ctx context.Context, logger *slog.Logger) []Link {
 		ContentContainer: "<h1>Custom HTML</h1>",
 	}
 
-	links = append(links, Link{ID: uuid.New(), Key: timedKey, Target: redirectionURL, Options: redirection.OptionTimed, Content: &testTimedDesc})
-	links = append(links, Link{ID: uuid.New(), Key: confirmKey, Target: redirectionURL, Options: redirection.OptionConfirm, Content: &confirmDesc})
-	links = append(links, Link{ID: uuid.New(), Key: customKey, Target: redirectionURL, Options: redirection.OptionCustom, Content: &customDesc})
+	links = append(links, Link{Path: timedKey, Target: redirectionURL, Options: enums.RedirectionChoiceTimed, Content: &testTimedDesc})
+	links = append(links, Link{Path: confirmKey, Target: redirectionURL, Options: enums.RedirectionChoiceConfirm, Content: &confirmDesc})
+	links = append(links, Link{Path: customKey, Target: redirectionURL, Options: enums.RedirectionChoiceCustom, Content: &customDesc})
 
 	logger.Log(ctx, slog.LevelInfo, "Links are setted from mock", slog.String("timed Key:", timedKey), slog.String("confirm Key:", confirmKey), slog.String("custom Key:", customKey))
 	logger.Log(ctx, slog.LevelInfo, "Timed Link", slog.String("Key:", timedKey))

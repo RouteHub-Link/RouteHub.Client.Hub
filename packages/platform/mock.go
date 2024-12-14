@@ -1,7 +1,7 @@
 package platform
 
 import (
-	"github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
 	"github.com/RouteHub-Link/routehub.client.hub/packages/status"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
@@ -27,7 +27,7 @@ func MockPlatform() Platform {
 	return Platform{
 		Name:               "RouteHub",
 		Slug:               "routehub",
-		DefaultRedirection: redirection.OptionTimed,
+		DefaultRedirection: enums.RedirectionChoiceTimed,
 		Status:             status.StateActive,
 		LayoutDescription:  &layoutDescription,
 	}

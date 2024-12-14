@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	redirection "github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
 	"github.com/RouteHub-Link/routehub.client.hub/server/context"
 	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
 	redirection_pages "github.com/RouteHub-Link/routehub.client.hub/templates/pages/redirections"
@@ -35,14 +35,18 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 		return c.String(http.StatusNotFound, "Link not found")
 	}
 
+	if link.Content.MetaDescription.Locale != "" {
+		c.Request().Header.Set("Content-Language", link.Content.MetaDescription.Locale)
+	}
+
 	switch link.Options {
-	case redirection.OptionTimed:
+	case enums.RedirectionChoiceTimed:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Timed(*platform.LayoutDescription, *link))
-	case redirection.OptionConfirm:
+	case enums.RedirectionChoiceConfirm:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Confirm(*platform.LayoutDescription, *link))
-	case redirection.OptionDirectHTTP:
+	case enums.RedirectionChoiceDirectHTTP:
 		return HandleDirectRendering(c, link.Target)
-	case redirection.OptionCustom:
+	case enums.RedirectionChoiceCustom:
 		return extensions.Render(c, http.StatusOK, redirection_pages.Custom(*platform.LayoutDescription, *link))
 	default:
 		return c.String(http.StatusBadRequest, "Invalid choice")

@@ -3,17 +3,15 @@ package link
 import (
 	"fmt"
 
-	redirection "github.com/RouteHub-Link/routehub.client.hub/packages/redirection"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
-	"github.com/google/uuid"
 )
 
 type Link struct {
-	ID      uuid.UUID          `gorm:"type:uuid;primary_key;"`
-	Target  string             `gorm:"type:varchar(255);not null;"`
-	Key     string             `gorm:"type:varchar(255);not null;"`
-	Options redirection.Option `gorm:"type:varchar(255);not null;"`
-	Content *LinkContent       `gorm:"type:varchar(255);not null;"`
+	Target  string                  `gorm:"type:varchar(255);not null;" json:"target"`
+	Path    string                  `gorm:"type:varchar(255);not null;" json:"path"`
+	Options enums.RedirectionChoice `gorm:"type:varchar(255);not null;" json:"redirection_choice"`
+	Content *LinkContent            `gorm:"type:varchar(255);not null;" json:"link_content"`
 }
 
 type LinkContent struct {
@@ -29,7 +27,7 @@ type LinkContent struct {
 
 func (lc *LinkContent) GetRedirectionDelay() string {
 	if lc.RedirectionDelay == nil {
-		return ""
+		return "10"
 	}
 	return fmt.Sprint(*lc.RedirectionDelay)
 }

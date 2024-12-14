@@ -76,7 +76,7 @@ func (lcs *LinkClientService) SetLink(ctx context.Context, link *Link) error {
 		return err
 	}
 
-	concatedKey := strings.Join([]string{keyPrefix, link.Key}, "")
+	concatedKey := strings.Join([]string{keyPrefix, link.Path}, "")
 
 	err = lcs.redisClient.Set(ctx, concatedKey, linkJson, 0).Err()
 	if err != nil {

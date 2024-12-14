@@ -4,6 +4,7 @@ type MetaDescription struct {
 	Title         string
 	FavIcon       string
 	Description   string
+
 	OGTitle       string
 	OGDescription string
 	OGURL         string
@@ -28,46 +29,70 @@ templ MetaBlock(m MetaDescription) {
 	if m.Title != "" {
 		<title>{ m.Title }</title>
 	}
+
 	if m.FavIcon != "" {
 		<link rel="icon" href={m.FavIcon} type="image/x-icon"/>
 	}
+
 	if m.Description != "" {
 		<meta name="description" content={m.Description}/>
 	}
+	
 	if m.OGTitle != "" {
 		<meta property="og:title" content={m.OGTitle}/>
 	}
+
 	if m.OGDescription != "" {
 		<meta property="og:description" content={m.OGDescription}/>
+		<meta name="twitter:description" content={m.OGDescription}/>
 	}
+
 	if m.OGURL != "" {
 		<meta property="og:url" content={m.OGURL}/>
+		<meta name="twitter:url" content={m.OGURL}/>
 	}
+
 	if m.OGSiteName != "" {
 		<meta property="og:site_name" content={m.OGSiteName}/>
 	}
+
 	if m.OGMetaType != "" {
 		<meta property="og:type" content={m.OGMetaType}/>
 	}
+
 	if m.OGLocale != "" {
 		<meta property="og:locale" content={m.OGLocale}/>
 	}
+	
 	if m.OGBigImage != "" {
 		<meta property="og:image" content={m.OGBigImage}/>
 	}
+
 	if m.OGBigWidth != "" {
 		<meta property="og:image:width" content={m.OGBigWidth}/>
 	}
+	
 	if m.OGBigHeight != "" {
 		<meta property="og:image:height" content={m.OGBigHeight}/>
 	}
+
 	if m.OGSmallImage != "" {
 		<meta property="og:image" content={m.OGSmallImage}/>
 	}
+
 	if m.OGSmallWidth != "" {
 		<meta property="og:image:width" content={m.OGSmallWidth}/>
 	}
+
 	if m.OGSmallHeight != "" {
 		<meta property="og:image:height" content={m.OGSmallHeight}/>
+	}
+
+	if m.OGCard != "" {
+		<meta name="twitter:card" content={m.OGCard}/>
+	}
+
+	if m.OGCreator != "" {
+		<meta name="twitter:creator" content={m.OGCreator}/>
 	}
 }

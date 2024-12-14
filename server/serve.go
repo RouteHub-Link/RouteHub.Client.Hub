@@ -2,10 +2,9 @@ package server
 
 import (
 	"context"
-	"net/http"
+	"log/slog"
 	"os"
-	"os/signal"
-	"time"
+	"strings"
 
 	"github.com/RouteHub-Link/routehub.client.hub/packages"
 	"github.com/RouteHub-Link/routehub.client.hub/packages/analytics"
@@ -15,6 +14,7 @@ import (
 	"github.com/RouteHub-Link/routehub.client.hub/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/ory/graceful"
 )
 
 func NewRestServer() {
@@ -54,20 +54,19 @@ func NewRestServer() {
 	}
 
 	e.Use(analyticsMiddleware.Middleware())
-
-	go func() {
-		if err := e.Start(":8080"); err != nil && err != http.ErrServerClosed {
-			logger.Error("Failed to start server", "error", err)
-		}
-	}()
-
-	// Wait for interrupt signal to gracefully shutdown the server
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	if err := e.Shutdown(ctx); err != nil {
-		logger.Error("Failed to shutdown server gracefully", "error", err)
+	envPort := os.Getenv("PORT")
+	if envPort == "" {
+		envPort = "8080"
 	}
+
+	e.Server.Addr = strings.Join([]string{":", envPort}, "")
+
+	server := graceful.WithDefaults(e.Server)
+
+	logger.Info("main: Starting server")
+	logger.Info("main: Listening on", slog.String("port", envPort))
+	if err := graceful.Graceful(server.ListenAndServe, server.Shutdown); err != nil {
+		logger.Error("main: Failed to gracefully shutdown", slog.Any("error", err))
+	}
+	logger.Info("main: Server stopped")
 }
