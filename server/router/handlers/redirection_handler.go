@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/status"
 	"github.com/RouteHub-Link/routehub.client.hub/server/context"
 	"github.com/RouteHub-Link/routehub.client.hub/server/extensions"
 	redirection_pages "github.com/RouteHub-Link/routehub.client.hub/templates/pages/redirections"
@@ -33,6 +34,11 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 	if err != nil {
 		logger.Log(ctx, slog.LevelInfo, "Link not found", slog.String("key", key))
 		return c.String(http.StatusNotFound, "Link not found")
+	}
+
+	if link.Status != status.StatusActive {
+		logger.Log(ctx, slog.LevelInfo, "Link is not active", slog.String("key", key))
+		return c.String(http.StatusNotFound, "Link is not active")
 	}
 
 	if link.Content.MetaDescription.Locale != "" {

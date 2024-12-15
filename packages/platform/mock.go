@@ -28,7 +28,7 @@ func MockPlatform() Platform {
 		Name:               "RouteHub",
 		Slug:               "routehub",
 		DefaultRedirection: enums.RedirectionChoiceTimed,
-		Status:             status.StateActive,
+		Status:             status.StatusActive,
 		LayoutDescription:  &layoutDescription,
 	}
 }

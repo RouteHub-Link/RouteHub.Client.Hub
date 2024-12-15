@@ -1,48 +1,40 @@
 package status
 
-import (
-	"fmt"
-	"io"
-	"strconv"
-)
-
-type State string
+//go:generate go run github.com/dmarkham/enumer -type=StatusState -trimprefix=StatusState -transform=snake-upper -json -sql -values -gqlgen
+type StatusState int
 
 const (
-	StatePasive State = "PASIVE"
-	StateActive State = "ACTIVE"
+	StatusInactive StatusState = iota
+	StatusActive
 )
 
-var AllState = []State{
-	StatePasive,
-	StateActive,
-}
-
-func (e State) IsValid() bool {
-	switch e {
-	case StatePasive, StateActive:
-		return true
+func (s StatusState) Humanize() string {
+	switch s {
+	case StatusInactive:
+		return "Inactive"
+	case StatusActive:
+		return "Active"
+	default:
+		return "Unknown"
 	}
-	return false
 }
 
-func (e State) String() string {
-	return string(e)
-}
-
-func (e *State) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
+func (s StatusState) HumanizeAll() []string {
+	return []string{
+		StatusInactive.Humanize(),
+		StatusActive.Humanize(),
 	}
-
-	*e = State(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid State", str)
-	}
-	return nil
 }
 
-func (e State) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+func (s StatusState) HumanizeWithValue() []struct {
+	Value int
+	Label string
+} {
+	return []struct {
+		Value int
+		Label string
+	}{
+		{int(StatusInactive), StatusInactive.Humanize()},
+		{int(StatusActive), StatusActive.Humanize()},
+	}
 }

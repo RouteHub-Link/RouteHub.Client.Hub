@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/RouteHub-Link/routehub.client.hub/packages/enums"
+	"github.com/RouteHub-Link/routehub.client.hub/packages/status"
 	"github.com/RouteHub-Link/routehub.client.hub/templates/layouts/components"
 )
 
@@ -12,6 +13,7 @@ type Link struct {
 	Path    string                  `gorm:"type:varchar(255);not null;" json:"path"`
 	Options enums.RedirectionChoice `gorm:"type:varchar(255);not null;" json:"redirection_choice"`
 	Content *LinkContent            `gorm:"type:varchar(255);not null;" json:"link_content"`
+	Status  status.StatusState      `gorm:"type:varchar(255);not null;" json:"status"`
 }
 
 type LinkContent struct {
