@@ -23,6 +23,7 @@ type MetaDescription struct {
 	OGSite 	  	  string
 	OGType 	  	  string
 	OGCreator 	  string
+	TracingScript string
 }
 
 templ MetaBlock(m MetaDescription) {
@@ -94,5 +95,9 @@ templ MetaBlock(m MetaDescription) {
 
 	if m.OGCreator != "" {
 		<meta name="twitter:creator" content={m.OGCreator}/>
+	}
+
+	if m.TracingScript != "" {
+		@templ.Raw(m.TracingScript)
 	}
 }

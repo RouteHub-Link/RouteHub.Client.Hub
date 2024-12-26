@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"log"
 	"log/slog"
 	"os"
 	"strings"
@@ -42,12 +44,17 @@ func NewPlatformClientService(rc *redis.Client, logger *slog.Logger, platformId 
 
 func NewPlatformClientServiceDefault(rc *redis.Client, logger *slog.Logger) *PlatformClientService {
 	platformId := os.Getenv("PLATFORM_ID")
+	if platformId == "" {
+		platformId = "default"
+		log.Println("PLATFORM_ID is not set, using default")
+	}
 	return NewPlatformClientService(rc, logger, platformId, false)
 }
 
 func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, error) {
 	if pcs.platformId == "" {
-		return nil, errors.New(strings.Join([]string{"key is empty", "prefix is :", keyPrefix}, " "))
+		pcs.platformId = "default"
+		pcs.logger.LogAttrs(ctx, slog.LevelDebug, "platformId is empty, using default", slog.String("platformId", pcs.platformId))
 	}
 
 	concatedKey := strings.Join([]string{keyPrefix, pcs.platformId}, "")
@@ -55,12 +62,14 @@ func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, e
 	platform, err := pcs.redisClient.Get(ctx, concatedKey).Result()
 
 	if err != nil {
+		log.Println(fmt.Sprintf("Error getting platform : key %s", concatedKey), err)
 		return nil, err
 	}
 
 	var p Platform
 	err = json.Unmarshal([]byte(platform), &p)
 	if err != nil {
+		log.Println("Error unmarshalling platform", err)
 		return nil, err
 	}
 
@@ -70,7 +79,8 @@ func (pcs *PlatformClientService) GetPlatform(ctx context.Context) (*Platform, e
 func (pcs *PlatformClientService) SetPlatform(ctx context.Context, p *Platform) error {
 	pcs.logger.LogAttrs(ctx, slog.LevelDebug, "SetPlatform Called", slog.String("platformId", pcs.platformId))
 	if pcs.platformId == "" {
-		return errors.New(strings.Join([]string{"key is empty", "prefix is :", keyPrefix}, " "))
+		pcs.platformId = "default"
+		pcs.logger.LogAttrs(ctx, slog.LevelDebug, "platformId is empty, using default", slog.String("platformId", pcs.platformId))
 	}
 
 	if p == nil {

@@ -23,9 +23,8 @@ services:
       - SEED=${APP_SEED}
       - Name=${APP_NAME}
       - Version=${APP_VERSION}
-      - TIMESCALE_DB=postgres://postgres:password@routehub-timescale:5432/postgres
+    restart: always
     depends_on:
-      - routehub-timescale
       - rotehub-redis
       - routehubclient-mqtt
   
@@ -42,17 +41,12 @@ services:
        - REDIS_PORT=6379
        - REDIS_PASSWORD=
        - REDIS_DB=0
+       - ORGANIZATION_ID=${ORGANIZATION_ID}
+       - OWNER_ID=${OWNER_ID}
+       - PLATFORM_ID=${PLATFORM_ID}
+       - PLATFORM_SECRET=${PLATFORM_SECRET}
      depends_on:
         - rotehub-redis
-  
-  routehub-timescale:
-    image: timescale/timescaledb-ha:pg16
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-    expose:
-      - 5432
 
   rotehub-redis:
     image: eqalpha/keydb

@@ -13,6 +13,10 @@ func (eh echoHandlers) HomeHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	sec := c.(*context.ServerEchoContext)
+	if sec == nil {
+		return c.String(http.StatusInternalServerError, "error getting server context")
+	}
+
 	platformClient := sec.GetPlatformClientService()
 	platform, err := platformClient.GetPlatform(ctx)
 

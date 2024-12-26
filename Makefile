@@ -53,3 +53,6 @@ serve-rest-bash:
 	 go run ."
 
 
+
+compose-local-up:
+	docker-compose -f docker-compose.local.yml up -d --force-recreate --build

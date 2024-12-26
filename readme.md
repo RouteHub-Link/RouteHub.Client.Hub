@@ -31,11 +31,10 @@ make hotserve
 ```
 
 Please use .env file for required environment variables. For easy development SEED is provided. Check .env.development file. Copy it to .env file.
-For development you just need to connect 2 services. Redis and TimeScaleDB. You can use docker-compose file for that or you can run them by yourself. Pleaase check Makefile for commands.
+For development you just need to connect 1 services. Redis. You can use docker-compose file for that or you can run them by yourself. Pleaase check Makefile for commands.
 
 ```bash
 make keydb
-make timescaledb
 ```
 
 If you use podman you can use podman- as prefix. For example;
@@ -49,7 +48,6 @@ make podman-keydb
 - REST as self (for handling request's)
 - MQTT as self (for handling update's & sending reports)
 - Redis as keydb (keydb not required but suggested. Used as database)
-- TimeScaleDB (Storing request's for analytics)
 
 ## Deployment
 
@@ -74,7 +72,6 @@ docker compose -f "docker-compose.hosted.yml" up -d --build
 ## Technologies
 
 - GO
-- TimeScaleDB
 - Redis as KeyDB
 - MQTT
 - Rest Echo

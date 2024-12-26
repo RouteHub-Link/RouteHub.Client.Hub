@@ -16,9 +16,8 @@ var (
 )
 
 type ApplicationConfig struct {
-	Redis     *RedisConfig
-	Details   *DetailsConfig
-	Analytics *AnalyticsConfig
+	Redis   *RedisConfig
+	Details *DetailsConfig
 }
 
 type RedisConfig struct {
@@ -39,14 +38,6 @@ type DetailsConfig struct {
 
 	SEED        bool        `env:"SEED"`
 	HostingMode HostingMode `env:"HOSTING_MODE"`
-	TimeScaleDB string      `env:"TIMESCALE_DB"`
-}
-
-type AnalyticsConfig struct {
-	TimeScaleDB    string   `env:"TIMESCALE_DB"`
-	AllowedHeaders []string `env:"ALLOWED_HEADERS"`
-	BufferLimit    int      `env:"BUFFER_LIMIT"`
-	FlushInterval  int      `env:"FLUSH_INTERVAL"`
 }
 
 type HostingMode string
@@ -66,7 +57,6 @@ func getApplicationConfig() *ApplicationConfig {
 		_appConfig = &ApplicationConfig{}
 		_redisConfig := &RedisConfig{}
 		_detailsConfig := &DetailsConfig{}
-		_analyticsConfig := &AnalyticsConfig{}
 
 		env.Parse(_redisConfig)
 		_appConfig.Redis = _redisConfig
@@ -75,10 +65,6 @@ func getApplicationConfig() *ApplicationConfig {
 		env.Parse(_detailsConfig)
 		_appConfig.Details = _detailsConfig
 		logger.Log(context.Background(), slog.LevelDebug, "Details config", slog.Any("config", _detailsConfig))
-
-		env.Parse(_analyticsConfig)
-		_appConfig.Analytics = _analyticsConfig
-		logger.Log(context.Background(), slog.LevelDebug, "Analytics config", slog.Any("config", _analyticsConfig))
 	})
 
 	return _appConfig
@@ -116,13 +102,4 @@ func GetDetailsConfig() DetailsConfig {
 	}
 
 	return *appConfig.Details
-}
-
-func GetAnalyticsConfig() AnalyticsConfig {
-	appConfig := getApplicationConfig()
-	if appConfig == nil {
-		logger.Log(context.Background(), slog.LevelError, "Application config is nil")
-	}
-
-	return *appConfig.Analytics
 }
