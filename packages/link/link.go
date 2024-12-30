@@ -17,14 +17,14 @@ type Link struct {
 }
 
 type LinkContent struct {
-	Title              string
-	Subtitle           string
-	ContentContainer   string
-	RedirectionURLText string
-	RedirectionDelay   *int
-	MetaDescription    *components.MetaDescription
-	AdditionalHead     *string
-	AdditionalFooter   *string
+	Title              string                      `json:"title" form:"title"`
+	Subtitle           string                      `json:"subtitle" form:"subtitle"`
+	ContentContainer   string                      `json:"content_container" form:"content_container"`
+	RedirectionURLText string                      `json:"redirection_url_text" form:"redirection_url_text"`
+	RedirectionDelay   *int                        `json:"redirection_delay" form:"redirection_delay"`
+	MetaDescription    *components.MetaDescription `json:"meta_description" form:"meta_description"`
+	AdditionalHead     *string                     `json:"additional_head" form:"additional_head"`
+	AdditionalFooter   *string                     `json:"additional_foot" form:"additional_foot"`
 }
 
 func (lc *LinkContent) GetRedirectionDelay() string {

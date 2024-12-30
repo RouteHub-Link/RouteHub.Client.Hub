@@ -1,29 +1,35 @@
 package components
 
 type MetaDescription struct {
-	Title         string
-	FavIcon       string
-	Description   string
+	Title       string `json:"meta_description_title" form:"meta_description_title"`
+	FavIcon     string `json:"meta_description_favicon" form:"meta_description_favicon"`
+	Description string `json:"meta_description_description" form:"meta_description_description"`
 
-	OGTitle       string
-	OGDescription string
-	OGURL         string
-	OGSiteName    string
-	OGMetaType    string
-	OGLocale      string
-	OGBigImage    string
-	OGBigWidth    string
-	OGBigHeight   string
-	OGSmallImage  string
-	OGSmallWidth  string
-	OGSmallHeight string
-	
-	Locale 	      string
-    OGCard 	  	  string
-	OGSite 	  	  string
-	OGType 	  	  string
-	OGCreator 	  string
-	TracingScript string
+	// og:description, twitter:description
+	OGDescription string `json:"meta_description_og_description" form:"meta_description_og_description"`
+	OGType        string `json:"meta_description_og_type" form:"meta_description_og_type"`
+
+	// og:url, twitter:url
+	OGURL string `json:"meta_description_og_url" form:"meta_description_og_url"`
+	// og:title, twitter:title
+	OGTitle string `json:"meta_description_og_title" form:"meta_description_og_title"`
+
+	OGBigImage   string `json:"meta_description_og_big_image" form:"meta_description_og_big_image"`
+	OGSmallImage string `json:"meta_description_og_small_image" form:"meta_description_og_small_image"`
+
+	Locale     string `json:"meta_description_locale" form:"meta_description_locale"`
+	OGSiteName string `json:"meta_description_og_site_name" form:"meta_description_og_site_name"`
+	OGLocale   string `json:"meta_description_og_locale" form:"meta_description_og_locale"`
+	// twitter:card
+	OGCard string `json:"meta_description_og_card" form:"meta_description_og_card"`
+	/*
+		twitter:creator
+		@username of content creator
+
+		Used with summary_large_image cards
+	*/
+	OGCreator string `json:"meta_description_og_creator" form:"meta_description_og_creator"`
+	TracingScript string `json:"meta_description_tracing_script" form:"meta_description_tracing_script"`
 }
 
 templ MetaBlock(m MetaDescription) {
@@ -57,8 +63,8 @@ templ MetaBlock(m MetaDescription) {
 		<meta property="og:site_name" content={m.OGSiteName}/>
 	}
 
-	if m.OGMetaType != "" {
-		<meta property="og:type" content={m.OGMetaType}/>
+	if m.OGType != "" {
+		<meta property="og:type" content={m.OGType}/>
 	}
 
 	if m.OGLocale != "" {
@@ -69,24 +75,9 @@ templ MetaBlock(m MetaDescription) {
 		<meta property="og:image" content={m.OGBigImage}/>
 	}
 
-	if m.OGBigWidth != "" {
-		<meta property="og:image:width" content={m.OGBigWidth}/>
-	}
-	
-	if m.OGBigHeight != "" {
-		<meta property="og:image:height" content={m.OGBigHeight}/>
-	}
 
 	if m.OGSmallImage != "" {
 		<meta property="og:image" content={m.OGSmallImage}/>
-	}
-
-	if m.OGSmallWidth != "" {
-		<meta property="og:image:width" content={m.OGSmallWidth}/>
-	}
-
-	if m.OGSmallHeight != "" {
-		<meta property="og:image:height" content={m.OGSmallHeight}/>
 	}
 
 	if m.OGCard != "" {

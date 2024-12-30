@@ -41,7 +41,7 @@ func (eh echoHandlers) HandleShortenURL(c echo.Context) error {
 		return c.String(http.StatusNotFound, "Link is not active")
 	}
 
-	if link.Content.MetaDescription.Locale != "" {
+	if link.Content != nil && link.Content.MetaDescription != nil && link.Content.MetaDescription.Locale != "" {
 		c.Request().Header.Set("Content-Language", link.Content.MetaDescription.Locale)
 	}
 
